@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from models.basic.div import Div
 
 
@@ -10,4 +12,4 @@ class FormGroup2(Div):
     caller only supplies ``elements`` (and optionally ``depends_on``).
     """
 
-    class_: str = "form-group-2"
+    base_css_classes: ClassVar[str] = "form-group-2"

@@ -1,7 +1,7 @@
 from models.questions.base_question import BaseQuestion
 
 
-class TextQuestion(BaseQuestion):
+class SingleQuestion(BaseQuestion):
     """
     A question answered with a single free-form value (text, date, integer, ...).
 

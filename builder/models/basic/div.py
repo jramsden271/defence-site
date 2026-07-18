@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic import Field, field_validator
 
 from models.basic.base_element import BaseElement, Conditional, normalise_children
@@ -16,7 +18,7 @@ class Div(Conditional):
     ``elements=[P(text="some text")]``.
     """
 
-    class_: str = "form-group"
+    base_css_classes: ClassVar[str] = "form-group"
     # Declared as ``str | BaseElement`` so callers can pass plain strings; the
     # validator below normalises everything to BaseElement instances.
     elements: list[str | BaseElement] = Field(
@@ -34,7 +36,7 @@ class Div(Conditional):
                 children.append(child.to_html())
         inner_html = "\n".join(children)
         return (
-            f'<div class="{self.class_}"{self._visibility_attrs()}>\n'
+            f'<div class="{self._css_classes()}"{self._visibility_attrs()}>\n'
             f"{inner_html}\n"
             f"</div>"
         )

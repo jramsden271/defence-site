@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic import Field
 
 from models.basic.base_element import Triggerable, render_help
@@ -17,6 +19,8 @@ class RadioGroup(Triggerable):
     Because it is :class:`Triggerable`, other elements can depend on the
     selected answer via ``some_group.when("value")``.
     """
+
+    base_css_classes: ClassVar[str] = "radio-group govuk-radio-group"
 
     # inherited: name + .when() (Triggerable)
     question: MultipleChoiceQuestion = Field(..., description="The question this group renders.")
@@ -40,9 +44,9 @@ class RadioGroup(Triggerable):
 
         return (
             f'<label for="{self.name}">{self.question.display_question}</label>\n'
-            f'<div class="radio-group govuk-radio-group" '
+            f'<div class="{self._css_classes()}" '
             f'data-trigger="{self.trigger_id}">\n'
             f"{items_html}\n"
             f"</div>"
-            f"{render_help(self.question.help_title, self.question.help_body)}"
+            f"{render_help(self.question.help)}"
         )

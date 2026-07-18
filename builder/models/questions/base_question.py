@@ -1,30 +1,40 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class HelpText(BaseModel):
+    """A question's help title/body, validated (e.g. when loaded from JSON)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    title: str | None = Field(default=None, description="Title/summary for the help block, if any.")
+    body: str = Field(default="", description="Help text; empty means no help.")
+
+
 class BaseQuestion(BaseModel):
     """
     Base class for all questions: plain data describing what's being asked,
     with no knowledge of how it will be rendered as HTML.
 
-    Help text is recorded as plain ``help_title``/``help_body`` strings; it's
-    up to the control rendering the question to turn that into whatever
-    widget it uses (e.g. an ``ExpandingTextbox``) — see
-    :func:`~models.basic.base_element.render_help`.
+    Help text is recorded as a :class:`HelpText`; it's up to the control
+    rendering the question to turn that into whatever widget it uses (e.g. an
+    ``ExpandingTextbox``) — see :func:`~models.basic.base_element.render_help`.
     """
 
     model_config = ConfigDict(extra="forbid")
 
     display_question: str = Field(..., description="The question text.")
-    help_title: str | None = Field(
-        default=None, description="Title/summary for the help block, if any."
-    )
-    help_body: list[str] = Field(
-        default_factory=list, description="Help paragraphs; empty means no help."
+    help: HelpText | None = Field(
+        default=None, description="Help title/body for this question, if any."
     )
 
-    def add_help(self, title: str | None = None, body: list[str] | str | None = None) -> None:
-        """Set this question's help text."""
-        if isinstance(body, str):
-            body = [body]
-        self.help_title = title
-        self.help_body = list(body or [])
+    def add_help(self, title: str | None = None, body: str = "") -> None:
+        """Set this question's help text inline.
+
+        Separate paragraphs in ``body`` with a blank line (``\\n\\n``).
+        """
+        self.help = HelpText(title=title, body=body)
+
+    def set_help(self, help_text: HelpText) -> None:
+        """Set this question's help text from an existing :class:`HelpText`
+        (e.g. one loaded from a page's ``help_text.json``)."""
+        self.help = help_text

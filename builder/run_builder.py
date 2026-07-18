@@ -15,18 +15,26 @@ dependencies between questions are expressed with ``some_control.when("value")``
 from pathlib import Path
 
 from field_manifest import write_manifest
-from helpers import question
+from help_text import load_help_text
 from models.basic.base_element import assign_names_from_globals
+from models.basic.div import Div
 from models.div.form_group import FormGroup
 from models.div.form_group_2 import FormGroup2
-from models.div.form_group_container import FormGroupContainer
 from models.forms.button import Button
 from models.forms.date_input import DateInput
 from models.forms.form import Form
 from models.forms.radio.radio_group import RadioGroup
 from models.questions.multiple_choice_question import MultipleChoiceQuestion
 from models.questions.question_option import QuestionOption
-from models.questions.text_question import TextQuestion
+from models.questions.single_question import SingleQuestion
+
+script_dir = Path(__file__).parent
+page_dir = script_dir.parent / "pages" / "no_stopping_defence"
+
+# Help text is page content, not code — loaded from the page's own
+# help_text.json rather than hardcoded here. Look up entries by key and pass
+# to a question's set_help(), e.g. pronouns_q.set_help(HELP["pronouns_why"]).
+HELP = load_help_text(page_dir / "help_text.json")
 
 
 # ---------------------------------------------------------------------------
@@ -37,7 +45,7 @@ pronouns_q = MultipleChoiceQuestion(display_question="What are your pronouns?")
 pronouns_q.add_option(label="They/Them", value="neutral")
 pronouns_q.add_option(label="He/Him", value="male")
 pronouns_q.add_option(label="She/Her", value="female")
-pronouns_q.add_help("Why are you asking this?",'This is only used to ensure that the generated text uses the correct pronouns when referring to you. If you prefer not to specify, select "They/Them".')
+pronouns_q.set_help(HELP["pronouns_why"])
 pronouns = RadioGroup(question=pronouns_q)
 
 defend_as_q = MultipleChoiceQuestion(display_question="Are you defending as the Registered Keeper only, or as the Driver too?")
@@ -53,31 +61,16 @@ defend_as_q.add_option(
 )
 defend_as = RadioGroup(question=defend_as_q)
 
-incident_land = RadioGroup(
-    question=MultipleChoiceQuestion(
-        display_question="What land did the incident take place on?",
-        options=[
-            QuestionOption(label="Railway land", value="railway"),
-            QuestionOption(label="Other land under statutory control",value="airport", description="This includes land under the control of a local authority, airport, or other statutory body. It is usually land where byelaws are in place."),
-            QuestionOption(label="Other private land / Not sure", value="other"),
-        ],
-        help_body=[
-            "This is important because certain types of land are not considered "
-            "'relevant land' under the Protection of Freedoms Act 2012, in which "
-            "case, it is generally not possible to transfer liability to the "
-            "keeper. If the incident happened on non-relevant land, the "
-            "defendant is at a great advantage!",
-            "Airport land and railway land generally include access roads, car "
-            "parks and facilities immediately serving those lands. The boundary "
-            "is dictated by where byelaws are in place. The boundary can be "
-            "surprisingly large, and at some airports includes nearby hotels and "
-            "fast food restaurant car parks. If you are not sure whether the "
-            "incident happened on relevant land, it can be helpful to find a map "
-            "with the boundary where byelaws are in place, or ask a question in "
-            "the relevant forum.",
-        ],
-    ),
+incident_land_q = MultipleChoiceQuestion(
+    display_question="What land did the incident take place on?",
+    options=[
+        QuestionOption(label="Railway land", value="railway"),
+        QuestionOption(label="Other land under statutory control",value="airport", description="This includes land under the control of a local authority, airport, or other statutory body. It is usually land where byelaws are in place."),
+        QuestionOption(label="Other private land / Not sure", value="other"),
+    ],
 )
+incident_land_q.set_help(HELP["relevant_land"])
+incident_land = RadioGroup(question=incident_land_q)
 
 has_incident_date = RadioGroup(
     question=MultipleChoiceQuestion(
@@ -96,11 +89,11 @@ received_ntk = RadioGroup(question=received_ntk_q)
 
 ntk_has_parking_period_q = MultipleChoiceQuestion(display_question="Does the NtK show a parking period?")
 ntk_has_parking_period_q.add_yes_no_options()
-ntk_has_parking_period_q.add_help("What is a parking period?", "A valid NtK must show a parking period, which is the time during which the vehicle was parked and the alleged incident occurred. This is usually shown as a start and end time, or a total duration of parking. For no-stopping cases, it is unlikely that the NtK meets this requirement.")
+ntk_has_parking_period_q.set_help(HELP["parking_period"])
 ntk_has_parking_period = RadioGroup(question=ntk_has_parking_period_q)
 
-incident_date = DateInput(question=TextQuestion(display_question="Date of the incident:"))
-ntk_date = DateInput(question=TextQuestion(display_question="Issue date of the Notice to Keeper (NtK):"))
+incident_date = DateInput(question=SingleQuestion(display_question="Date of the incident:"))
+ntk_date = DateInput(question=SingleQuestion(display_question="Issue date of the Notice to Keeper (NtK):"))
 
 
 # Backfill each control's `name` (used as the HTML name/id and data-trigger
@@ -117,40 +110,28 @@ form = Form(
     id="profileForm",
     elements=[
         # Standalone questions
-        question(pronouns),
-        question(defend_as),
-        question(incident_land, show_when=defend_as.when("keeper")),
+        FormGroup(elements=[pronouns]),
+        FormGroup(elements=[defend_as]),
+        FormGroup2(
+            show_when=defend_as.when("keeper"),
+            elements=[incident_land],
+        ),
         # Incident date
-        FormGroupContainer(
-            elements=[
-                FormGroup(elements=[has_incident_date]),
-                FormGroup2(
-                    show_when=has_incident_date.when("single"),
-                    elements=[incident_date],
-                ),
-                FormGroup2(
-                    show_when=has_incident_date.when("range"),
-                    elements=[
-                        "A date range normally means that the Claimant has "
-                        "alleged multiple incidents within a specific time frame. "
-                        "This requires a slightly different approach, which this "
-                        "tool currently does not support. You can try selecting a "
-                        "single date and proceeding from there, or if the date "
-                        "range is vague enough, it may make more sense to use the "
-                        "Chan and Akande defence."
-                    ],
-                ),
-                FormGroup2(
-                    show_when=has_incident_date.when("no"),
-                    elements=[
-                        "If no date is specified at all, consider using the Chan "
-                        "and Akande defence."
-                    ],
-                ),
-            ],
+        FormGroup(elements=[has_incident_date]),
+        FormGroup2(
+            show_when=has_incident_date.when("single"),
+            elements=[incident_date],
+        ),
+        FormGroup2(
+            show_when=has_incident_date.when("range"),
+            elements=[HELP["date_range_explanation"].body],
+        ),
+        FormGroup2(
+            show_when=has_incident_date.when("no"),
+            elements=["If no date is specified at all, consider using the Chan and Akande defence."],
         ),
         # Notice to Keeper (keeper only)
-        FormGroupContainer(
+        Div(
             show_when=defend_as.when("keeper"),
             elements=[
                 FormGroup(elements=[received_ntk]),
@@ -176,7 +157,7 @@ form = Form(
             ],
         ),
         # Submit
-        Button(text="Generate Defence", onclick="generateText()"),
+        Button(text="Generate Defence", onclick="generateText()", extra_css_classes=["btn-center"]),
     ],
 )
 
@@ -185,15 +166,15 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-script_dir = Path(__file__).parent
+layout_dir = page_dir / "layout"
 
 html = ""
-with open(script_dir / "layout" / "blocks" / "header.html", "r", encoding="utf-8") as f:
+with open(layout_dir / "blocks" / "header.html", "r", encoding="utf-8") as f:
     html += f.read()
 
 html += "\n" + form.to_html() + "\n"
 
-with open(script_dir / "layout" / "blocks" / "footer.html", "r", encoding="utf-8") as f:
+with open(layout_dir / "blocks" / "footer.html", "r", encoding="utf-8") as f:
     html += f.read()
 
 with open(script_dir.parent / "test.html", "w", encoding="utf-8") as f:

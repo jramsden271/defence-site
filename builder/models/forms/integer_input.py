@@ -1,12 +1,12 @@
 from pydantic import Field
 
 from models.basic.base_element import Triggerable, render_help
-from models.questions.text_question import TextQuestion
+from models.questions.single_question import SingleQuestion
 
 
 class IntegerInput(Triggerable):
     """
-    Renders a :class:`~models.questions.text_question.TextQuestion` as a
+    Renders a :class:`~models.questions.single_question.SingleQuestion` as a
     labelled ``<input type="number" step="1">``, restricted to whole numbers,
     plus its collapsible help block.
 
@@ -14,11 +14,11 @@ class IntegerInput(Triggerable):
     """
 
     # inherited: name + .when() (Triggerable)
-    question: TextQuestion = Field(..., description="The question this input renders.")
+    question: SingleQuestion = Field(..., description="The question this input renders.")
 
     def to_html(self) -> str:
         return (
             f'<label for="{self.name}">{self.question.display_question}</label>\n'
             f'<input type="number" step="1" id="{self.name}">'
-            f"{render_help(self.question.help_title, self.question.help_body)}"
+            f"{render_help(self.question.help)}"
         )

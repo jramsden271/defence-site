@@ -1,9 +1,12 @@
 body {
     font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.page-content {
     max-width: 600px;
     margin: 40px auto;
     padding: 20px;
-    line-height: 1.6;
 }
 .form-group {
     margin-top: 50px;
@@ -35,6 +38,7 @@ input[type="text"], input[type="date"], select {
     box-sizing: border-box;
     border: 1px solid var(--color-border);
     border-radius: 4px;
+    font: inherit;
 }
 .radio-group {
     margin-top: 8px;
@@ -84,6 +88,11 @@ summary:hover {
 .btn-primary:hover {
     background-color: var(--color-primary-hover);
 }
+.btn-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 .btn-secondary {
     background-color: var(--color-secondary);
     color: var(--color-text-on-dark);
@@ -105,4 +114,12 @@ summary:hover {
 /* Style for our numbered paragraphs */
 .story-paragraph {
     margin-bottom: 15px;
+}
+.page-footer {
+    margin-top: 50px;
+    padding-top: 15px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
 }

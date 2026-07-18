@@ -15,6 +15,8 @@
 </head>
 <body>
 
+<div class="page-content">
+
     <h2>No stopping defence generator</h2>
 
     <p>
@@ -26,7 +28,6 @@
     </p>
 <form id="profileForm">
 
-<div class="form-group-container">
 <div class="form-group">
 <label for="pronouns">What are your pronouns?</label>
 <div class="radio-group govuk-radio-group" data-trigger="pronounsTrigger">
@@ -50,9 +51,7 @@
 </div>
 </details>
 </div>
-</div>
 
-<div class="form-group-container">
 <div class="form-group">
 <label for="defendAs">Are you defending as the Registered Keeper only, or as the Driver too?</label>
 <div class="radio-group govuk-radio-group" data-trigger="defendAsTrigger">
@@ -66,9 +65,7 @@
 <div class="govuk-hint">Select if you have previously admitted to being the driver, or you were the driver AND you have a strong reason for making this a part of your case (e.g. you have mitigating circumstances that require you to reveal that you were the driver).</div></div>
 </div>
 </div>
-</div>
 
-<div class="form-group-container">
 <div class="form-group-2" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
 <label for="incidentLand">What land did the incident take place on?</label>
 <div class="radio-group govuk-radio-group" data-trigger="incidentLandTrigger">
@@ -93,9 +90,7 @@
 </div>
 </details>
 </div>
-</div>
 
-<div class="form-group-container">
 <div class="form-group">
 <label for="hasIncidentDate">Do the Particulars of Claim show the date of when the incident(s) occurred?</label>
 <div class="radio-group govuk-radio-group" data-trigger="hasIncidentDateTrigger">
@@ -113,19 +108,21 @@
 </div>
 </div>
 </div>
+
 <div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="single" style="display:none;">
 <label for="incidentDate">Date of the incident:</label>
 <input type="date" id="incidentDate">
 </div>
+
 <div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="range" style="display:none;">
 <p>A date range normally means that the Claimant has alleged multiple incidents within a specific time frame. This requires a slightly different approach, which this tool currently does not support. You can try selecting a single date and proceeding from there, or if the date range is vague enough, it may make more sense to use the Chan and Akande defence.</p>
 </div>
+
 <div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="no" style="display:none;">
 <p>If no date is specified at all, consider using the Chan and Akande defence.</p>
 </div>
-</div>
 
-<div class="form-group-container" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
+<div class="form-group" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
 <div class="form-group">
 <label for="receivedNtk">Did you receive a Notice to Keeper (NtK)?</label>
 <div class="radio-group govuk-radio-group" data-trigger="receivedNtkTrigger">
@@ -166,7 +163,7 @@
 </div>
 </div>
 
-<button type="button" class="btn btn-primary" onclick="generateText()">Generate Defence</button>
+<button type="button" class="btn btn-primary btn-center" onclick="generateText()">Generate Defence</button>
 
 </form>
     <!-- Output Area -->
@@ -187,7 +184,11 @@
         <button type="button" id="copyBtn" class="btn btn-secondary" onclick="copyToClipboard()">Copy Text</button>
     </div>
 
+</div>
 
+    <footer class="page-footer">
+        <p>&copy; 2026 [Company Name]. All rights reserved.</p>
+    </footer>
 
     <script>
 

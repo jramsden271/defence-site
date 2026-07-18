@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, ClassVar
+
 from pydantic import BaseModel, ConfigDict
+
+if TYPE_CHECKING:
+    from models.questions.base_question import HelpText
 
 
 class Dependency(BaseModel):
@@ -50,6 +55,28 @@ class BaseElement(BaseModel):
     """
 
     model_config = ConfigDict(extra="forbid")
+
+    # A fixed, structural CSS class string for this kind of element (e.g.
+    # "radio-group govuk-radio-group" for RadioGroup, "form-group-2" for
+    # FormGroup2). It's a ClassVar, not a pydantic field, so it's a true
+    # class-level constant: it can't be passed to __init__, set per-instance,
+    # or appear in model_dump()/schema — only overridden by subclassing.
+    # Elements with no single top-level tag can leave this at "".
+    base_css_classes: ClassVar[str] = ""
+
+    # Additional CSS classes to append alongside base_css_classes. Additive
+    # rather than a replacement, so the structural class above can never be
+    # accidentally dropped by a caller reaching for extra styling.
+    extra_css_classes: list[str] = []
+
+    def _css_classes(self) -> str:
+        """This element's ``base_css_classes`` plus any ``extra_css_classes``
+        (space-joined). Elements with no single top-level tag can simply not
+        call this — ``extra_css_classes`` then goes unused, which is safe.
+        """
+        if not self.extra_css_classes:
+            return self.base_css_classes
+        return " ".join([self.base_css_classes, *self.extra_css_classes])
 
     def to_html(self) -> str:
         """
@@ -130,25 +157,25 @@ def assign_names_from_globals(namespace: dict) -> None:
             value.name = _to_camel_case(var_name)
 
 
-def render_help(help_title: str | None, help_body: list[str]) -> str:
+def render_help(help: "HelpText | None") -> str:
     """Render a question's help text as an ``ExpandingTextbox`` block (prefixed
-    with a newline), or "" if ``help_body`` is empty.
+    with a newline), or "" if ``help`` is unset or has an empty body.
 
-    Controls call this with ``self.question.help_title``/``help_body`` —
-    building an ``ExpandingTextbox`` is an HTML concern, so it lives here
-    rather than on the question classes (see
-    :class:`~models.questions.base_question.BaseQuestion`). ``help_title=None``
+    Controls call this with ``self.question.help`` — building an
+    ``ExpandingTextbox`` is an HTML concern, so it lives here rather than on
+    the question classes (see
+    :class:`~models.questions.base_question.BaseQuestion`). A ``None`` title
     falls back to ``ExpandingTextbox``'s own default title.
     """
-    if not help_body:
+    if help is None or not help.body:
         return ""
 
     from models.widgets.expanding_textbox import ExpandingTextbox
 
     textbox = (
-        ExpandingTextbox(title=help_title, body=help_body)
-        if help_title is not None
-        else ExpandingTextbox(body=help_body)
+        ExpandingTextbox(title=help.title, body=help.body)
+        if help.title is not None
+        else ExpandingTextbox(body=help.body)
     )
     return f"\n{textbox.to_html()}"
 
