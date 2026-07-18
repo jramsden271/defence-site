@@ -1,0 +1,26 @@
+.claude
+
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments (Very important to ignore!)
+.venv/
+venv/
+ENV/
+env/
+
+# JavaScript dependencies
+node_modules/
+.npm/
+
+# IDEs and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment variables / Secrets (Never commit passwords or API keys!)
+.env
+*.env

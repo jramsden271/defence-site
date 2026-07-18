@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="resources/car_icon_150909.ico">
+    <link rel="stylesheet" href="css/colours.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/radio.css">
+    <script src="js/form_variables.js" defer></script>
+    <script src="js/generate_text.js" defer></script>
+    <script src="js/pofa_date.js" defer></script>
+
+    <title>No stopping defence generator</title>
+</head>
+<body>
+
+    <h2>No stopping defence generator</h2>
+
+    <p>
+        This tool is designed to help you generate a defence to a MCOL claim, where the claimant alleges that you contravened a 'no stopping' rule on private land. It is intended for use in England and Wales, where the Protection of Freedoms Act 2012 (PoFA) applies. In Scotland and Northern Ireland, things are <em>different</em>.
+    </p>
+    <p>The output of this tool is unlikely to exactly match your circumstances, but it should provide a useful starting point for your defence. Review the output carefully, and feel free to edit as needed.</p>
+    <p>
+        Note: The generated text is for informational purposes only and should not be considered legal advice. Always consult with a qualified legal professional for advice specific to your situation.
+    </p>
+<form id="profileForm">
+
+<div class="form-group-container">
+<div class="form-group">
+<label for="pronouns">What are your pronouns?</label>
+<div class="radio-group govuk-radio-group" data-trigger="pronounsTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="pronouns_neutral" name="pronouns" value="neutral">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="pronouns_neutral">They/Them</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="pronouns_male" name="pronouns" value="male">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="pronouns_male">He/Him</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="pronouns_female" name="pronouns" value="female">
+<label class="govuk-radio-label" style="display:inline;" for="pronouns_female">She/Her</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>This is only used to ensure that the generated text uses the correct pronouns when referring to you. If you prefer not to specify, select "They/Them".</p>
+</div>
+</details>
+</div>
+</div>
+
+<div class="form-group-container">
+<div class="form-group">
+<label for="defendAs">Are you defending as the Registered Keeper only, or as the Driver too?</label>
+<div class="radio-group govuk-radio-group" data-trigger="defendAsTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="defendAs_keeper" name="defendAs" value="keeper">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="defendAs_keeper">Registered Keeper only</label>
+<div class="govuk-hint">Select if you are the registered keeper and have not previously admitted to being the driver (whether or not you were the driver, or you can't recall). Defendants are often in a stronger legal position if they don't admit to being the driver.</div></div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="defendAs_driver" name="defendAs" value="driver">
+<label class="govuk-radio-label" style="display:inline;" for="defendAs_driver">Registered Keeper and driver</label>
+<div class="govuk-hint">Select if you have previously admitted to being the driver, or you were the driver AND you have a strong reason for making this a part of your case (e.g. you have mitigating circumstances that require you to reveal that you were the driver).</div></div>
+</div>
+</div>
+</div>
+
+<div class="form-group-container">
+<div class="form-group-2" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
+<label for="incidentLand">What land did the incident take place on?</label>
+<div class="radio-group govuk-radio-group" data-trigger="incidentLandTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="incidentLand_railway" name="incidentLand" value="railway">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="incidentLand_railway">Railway land</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="incidentLand_airport" name="incidentLand" value="airport">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="incidentLand_airport">Other land under statutory control</label>
+<div class="govuk-hint">This includes land under the control of a local authority, airport, or other statutory body. It is usually land where byelaws are in place.</div></div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="incidentLand_other" name="incidentLand" value="other">
+<label class="govuk-radio-label" style="display:inline;" for="incidentLand_other">Other private land / Not sure</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>This is important because certain types of land are not considered 'relevant land' under the Protection of Freedoms Act 2012, in which case, it is generally not possible to transfer liability to the keeper. If the incident happened on non-relevant land, the defendant is at a great advantage!</p>
+<p>Airport land and railway land generally include access roads, car parks and facilities immediately serving those lands. The boundary is dictated by where byelaws are in place. The boundary can be surprisingly large, and at some airports includes nearby hotels and fast food restaurant car parks. If you are not sure whether the incident happened on relevant land, it can be helpful to find a map with the boundary where byelaws are in place, or ask a question in the relevant forum.</p>
+</div>
+</details>
+</div>
+</div>
+
+<div class="form-group-container">
+<div class="form-group">
+<label for="hasIncidentDate">Do the Particulars of Claim show the date of when the incident(s) occurred?</label>
+<div class="radio-group govuk-radio-group" data-trigger="hasIncidentDateTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="hasIncidentDate_single" name="hasIncidentDate" value="single">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="hasIncidentDate_single">Yes - a single date</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="hasIncidentDate_range" name="hasIncidentDate" value="range">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="hasIncidentDate_range">Yes - a range of dates</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="hasIncidentDate_no" name="hasIncidentDate" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="hasIncidentDate_no">No</label>
+</div>
+</div>
+</div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="single" style="display:none;">
+<label for="incidentDate">Date of the incident:</label>
+<input type="date" id="incidentDate">
+</div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="range" style="display:none;">
+<p>A date range normally means that the Claimant has alleged multiple incidents within a specific time frame. This requires a slightly different approach, which this tool currently does not support. You can try selecting a single date and proceeding from there, or if the date range is vague enough, it may make more sense to use the Chan and Akande defence.</p>
+</div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="no" style="display:none;">
+<p>If no date is specified at all, consider using the Chan and Akande defence.</p>
+</div>
+</div>
+
+<div class="form-group-container" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
+<div class="form-group">
+<label for="receivedNtk">Did you receive a Notice to Keeper (NtK)?</label>
+<div class="radio-group govuk-radio-group" data-trigger="receivedNtkTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="receivedNtk_yes" name="receivedNtk" value="yes">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="receivedNtk_yes">Yes</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="receivedNtk_no" name="receivedNtk" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="receivedNtk_no">No</label>
+</div>
+</div>
+</div>
+<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="yes" style="display:none;">
+<p>The NtK must meet some strict requirements to allow liability to be transferred from the driver to the keeper. These questions will help establish whether it meets those requirements.</p>
+<label for="ntkDate">Issue date of the Notice to Keeper (NtK):</label>
+<input type="date" id="ntkDate">
+<label for="ntkHasParkingPeriod">Does the NtK show a parking period?</label>
+<div class="radio-group govuk-radio-group" data-trigger="ntkHasParkingPeriodTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkHasParkingPeriod_yes" name="ntkHasParkingPeriod" value="yes">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="ntkHasParkingPeriod_yes">Yes</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkHasParkingPeriod_no" name="ntkHasParkingPeriod" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="ntkHasParkingPeriod_no">No</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>A valid NtK must show a parking period, which is the time during which the vehicle was parked and the alleged incident occurred. This is usually shown as a start and end time, or a total duration of parking. For no-stopping cases, it is unlikely that the NtK meets this requirement.</p>
+</div>
+</details>
+</div>
+<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="no" style="display:none;">
+<p>This form is currently set up for defendants who have received a Notice to Keeper (NtK). This form is currently not set up for Notice to Hirer (NtH).</p>
+</div>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="generateText()">Generate Defence</button>
+
+</form>
+    <!-- Output Area -->
+    <div id="output-box">
+        <h3>PoFA results:</h3>
+        <div id="pofaResultsContainer"></div>
+
+        <h3>Defence:</h3>
+        <em>Review this defence carefully before submitting it to the court.</em>
+        <!-- Container where HTML elements will be injected dynamically -->
+        <div id="paragraphsContainer"></div>
+
+        <div id="charCount" style="font-size: 14px; color: #6c757d; margin-bottom: 10px; font-weight: bold;">
+            Character Count: 0
+        </div>
+        
+        <!-- Copy Button -->
+        <button type="button" id="copyBtn" class="btn btn-secondary" onclick="copyToClipboard()">Copy Text</button>
+    </div>
+
+
+
+    <script>
+
+
+        // --- CLIPBOARD COPIER FUNCTION ---
+        function copyToClipboard() {
+            const copyBtn = document.getElementById('copyBtn');
+            
+            // Check if there is data to copy
+            if (!rawPlainTextOutput) return;
+
+            // Use browser clipboard API
+            navigator.clipboard.writeText(rawPlainTextOutput)
+                .then(() => {
+                    // Visual feedback change to indicate success
+                    copyBtn.textContent = "Copied! ✓";
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert("Could not copy text automatically. Please select it manually.");
+                });
+        }
+
+        document.getElementById('profileForm').addEventListener('change', function(event) {
+            // 1. Find if the changed field belongs to a managed trigger group
+            const triggerContainer = event.target.closest('[data-trigger]');
+            if (!triggerContainer) return;
+
+            const triggerId = triggerContainer.getAttribute('data-trigger');
+            
+            // 2. Safely grab the current value whether it's a dropdown or a radio button
+            const currentValue = event.target.type === 'radio' 
+                ? triggerContainer.querySelector('input:checked').value 
+                : event.target.value;
+
+            // 3. Find and toggle all dependent elements instantly
+            document.querySelectorAll(`[data-depends-on="${triggerId}"]`).forEach(field => {
+                const targetValue = field.getAttribute('data-value');
+                
+                // If values match, set display to 'block', otherwise set it to 'none'
+                field.style.display = (currentValue === targetValue) ? 'block' : 'none';
+            });
+        });
+    </script>
+
+</body>
+</html>

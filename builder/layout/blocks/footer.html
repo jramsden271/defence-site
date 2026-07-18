@@ -1,0 +1,66 @@
+    <!-- Output Area -->
+    <div id="output-box">
+        <h3>PoFA results:</h3>
+        <div id="pofaResultsContainer"></div>
+
+        <h3>Defence:</h3>
+        <em>Review this defence carefully before submitting it to the court.</em>
+        <!-- Container where HTML elements will be injected dynamically -->
+        <div id="paragraphsContainer"></div>
+
+        <div id="charCount" style="font-size: 14px; color: #6c757d; margin-bottom: 10px; font-weight: bold;">
+            Character Count: 0
+        </div>
+        
+        <!-- Copy Button -->
+        <button type="button" id="copyBtn" class="btn btn-secondary" onclick="copyToClipboard()">Copy Text</button>
+    </div>
+
+
+
+    <script>
+
+
+        // --- CLIPBOARD COPIER FUNCTION ---
+        function copyToClipboard() {
+            const copyBtn = document.getElementById('copyBtn');
+            
+            // Check if there is data to copy
+            if (!rawPlainTextOutput) return;
+
+            // Use browser clipboard API
+            navigator.clipboard.writeText(rawPlainTextOutput)
+                .then(() => {
+                    // Visual feedback change to indicate success
+                    copyBtn.textContent = "Copied! ✓";
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert("Could not copy text automatically. Please select it manually.");
+                });
+        }
+
+        document.getElementById('profileForm').addEventListener('change', function(event) {
+            // 1. Find if the changed field belongs to a managed trigger group
+            const triggerContainer = event.target.closest('[data-trigger]');
+            if (!triggerContainer) return;
+
+            const triggerId = triggerContainer.getAttribute('data-trigger');
+            
+            // 2. Safely grab the current value whether it's a dropdown or a radio button
+            const currentValue = event.target.type === 'radio' 
+                ? triggerContainer.querySelector('input:checked').value 
+                : event.target.value;
+
+            // 3. Find and toggle all dependent elements instantly
+            document.querySelectorAll(`[data-depends-on="${triggerId}"]`).forEach(field => {
+                const targetValue = field.getAttribute('data-value');
+                
+                // If values match, set display to 'block', otherwise set it to 'none'
+                field.style.display = (currentValue === targetValue) ? 'block' : 'none';
+            });
+        });
+    </script>
+
+</body>
+</html>

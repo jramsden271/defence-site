@@ -1,0 +1,71 @@
+/* Container to space out multiple options vertically */
+.govuk-radio-item {
+  position: relative;
+  display: block;
+  min-height: 40px;
+  margin-bottom: 10px;
+  padding-left: 50px; /* Leaves space for the custom radio button on the left */
+}
+
+/* 1. Hide the browser's default radio button visually, but keep it accessible */
+.govuk-radio-input {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Style the text label next to it */
+.govuk-radio-label {
+  display: inline-block;
+  padding: 7px 15px 9px 0;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.75;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* 2. Create the large outer circle using a pseudo-element on the label */
+.govuk-radio-label::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-text); /* Uses your primary brand color */
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* 3. Create the inner solid dot (hidden by default) */
+.govuk-radio-label::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-text); /* Uses your primary brand color */
+  opacity: 0; /* Hidden initially */
+  transform: scale(0);
+  transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out;
+}
+
+/* 4. State updates: When the native hidden input is checked, show the dot */
+.govuk-radio-input:checked + .govuk-radio-label::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 5. Focus State: Critical for accessibility */
+.govuk-radio-input:focus + .govuk-radio-label::before {
+  outline: 3px solid transparent; /* Fallback for high-contrast modes */
+  box-shadow: 0 0 0 4px var(--color-primary); /* Uses your central focus highlight color */
+}
