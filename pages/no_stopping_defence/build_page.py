@@ -1,6 +1,5 @@
 """
-Build dist/no_stopping_defence/no_stopping_defence.html from Python element
-classes.
+Build dist/no_stopping_defence.html from Python element classes.
 
 Run via the repo-root entry point:
 
@@ -32,10 +31,10 @@ from builder.models.questions.single_question import SingleQuestion
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
 dist_dir = repo_root / "dist"
-# This page's own output folder — holds its HTML plus its page-specific JS
-# (generate_text.js, pofa_date.js, the generated form_variables.js). Shared
-# assets (css/, resources/) stay directly under dist_dir.
-page_output_dir = dist_dir / "no_stopping_defence"
+# HTML pages always build directly into dist/ (keeps URLs tidy — no
+# per-page subfolders). Page-specific resources (JS, ...) go under
+# dist/resources/<page>/ instead, alongside the site's shared resources.
+page_resources_dir = dist_dir / "resources" / "no_stopping_defence"
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -183,15 +182,15 @@ html += "\n" + form.to_html() + "\n"
 with open(layout_dir / "blocks" / "footer.html", "r", encoding="utf-8") as f:
     html += f.read()
 
-page_output_dir.mkdir(parents=True, exist_ok=True)
+dist_dir.mkdir(parents=True, exist_ok=True)
 
-output_path = page_output_dir / "no_stopping_defence.html"
+output_path = dist_dir / "no_stopping_defence.html"
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Wrote {output_path}")
 
-manifest_path = page_output_dir / "js" / "form_variables.js"
+manifest_path = page_resources_dir / "js" / "form_variables.js"
 manifest_path.parent.mkdir(parents=True, exist_ok=True)
 write_manifest(form, manifest_path)
 print(f"Wrote {manifest_path}")
