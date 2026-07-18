@@ -1,11 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-from pydantic import BaseModel, ConfigDict, Field, field_validator
-
-if TYPE_CHECKING:
-    from models.widgets.expanding_textbox import ExpandingTextbox
+from pydantic import BaseModel, ConfigDict
 
 
 class Dependency(BaseModel):
@@ -135,65 +130,26 @@ def assign_names_from_globals(namespace: dict) -> None:
             value.name = _to_camel_case(var_name)
 
 
-def normalise_help(value):
-    """Coerce a ``help`` input into a :class:`~models.forms.details.Details`.
+def render_help(help_title: str | None, help_body: list[str]) -> str:
+    """Render a question's help text as an ``ExpandingTextbox`` block (prefixed
+    with a newline), or "" if ``help_body`` is empty.
 
-    Accepts an existing ``Details`` (used as-is), a single string, or a list of
-    strings (each becomes a help paragraph under a default "Help" summary), or
-    ``None``. Used as a ``mode="before"`` field validator.
+    Controls call this with ``self.question.help_title``/``help_body`` —
+    building an ``ExpandingTextbox`` is an HTML concern, so it lives here
+    rather than on the question classes (see
+    :class:`~models.questions.base_question.BaseQuestion`). ``help_title=None``
+    falls back to ``ExpandingTextbox``'s own default title.
     """
-    # Lazy import: Details lives in models.forms and imports from this module.
-    from models.widgets.expanding_textbox import ExpandingTextbox
-
-    if value is None or isinstance(value, ExpandingTextbox):
-        return value
-    if isinstance(value, str):
-        value = [value]
-    return ExpandingTextbox(body=list(value))
-
-
-class HasHelp(BaseElement):
-    """
-    Mixin giving an element an optional collapsible help block.
-
-    ``help`` may be passed as a :class:`~models.forms.details.Details` (for full
-    control over the summary/paragraphs) or, as a shortcut, a string or list of
-    strings which are turned into a default-"Help"-summary ``Details``.
-
-    Elements render it via :meth:`help_html`, so it is up to each element to
-    decide *where* the help appears in its own markup.
-    """
-
-    # Accepts a ExpandingTextbox, a string, or a list of strings; the validator below
-    # normalises all of these to a ExpandingTextbox (or None).
-    help: "ExpandingTextbox | str | list[str] | None" = Field(
-        default=None, description="Optional help: a ExpandingTextbox, or string(s) shortcut."
-    )
-
-    _normalise_help = field_validator("help", mode="before")(normalise_help)
-
-    def help_html(self) -> str:
-        """Rendered help HTML (prefixed with a newline), or "" if no help set.
-
-        The validator has already coerced ``help`` to a ``ExpandingTextbox`` (or None);
-        the isinstance check just makes that guarantee explicit to type checkers.
-        """
-        if isinstance(self.help, ExpandingTextbox):
-            return f"\n{self.help.to_html()}"
+    if not help_body:
         return ""
 
-    def add_help(self, title: str = "Help", body: list[str] | str | None = None) -> None:
-        """Build a :class:`ExpandingTextbox` from ``summary``/``paragraphs`` and set it as ``help``."""
-        if isinstance(body, str):
-            body = [body]
-        self.help = ExpandingTextbox(body=list(body or []))
+    from models.widgets.expanding_textbox import ExpandingTextbox
+
+    textbox = (
+        ExpandingTextbox(title=help_title, body=help_body)
+        if help_title is not None
+        else ExpandingTextbox(body=help_body)
+    )
+    return f"\n{textbox.to_html()}"
 
 
-# Resolve the ``help: ExpandingTextbox | None`` forward reference now that the module is
-# otherwise complete. Imported at the bottom to avoid a circular import: ExpandingTextbox
-# depends on BaseElement/P above, not on HasHelp. Doing this here (rather than
-# relying on each caller to import ExpandingTextbox first) makes HasHelp usable on its
-# own regardless of import order.
-from models.widgets.expanding_textbox import ExpandingTextbox  # noqa: E402,F401
-
-HasHelp.model_rebuild()

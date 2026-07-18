@@ -24,10 +24,10 @@ def collect_fields(root: BaseElement) -> list[dict]:
 
     Recurses into anything with an ``elements`` list (``Form``, ``Div`` and its
     subclasses). Each :class:`RadioGroup` contributes one ``radio`` entry
-    (read via its ``name``, with its ``options`` — the possible ``value``s —
-    listed alongside); each :class:`DateInput`/:class:`TextInput`/
+    (read via its ``name``, with its question's ``options`` — the possible
+    ``value``s — listed alongside); each :class:`DateInput`/:class:`TextInput`/
     :class:`IntegerInput` contributes one ``date``/``text``/``integer`` entry
-    (read via its ``id``). Add another ``isinstance`` branch here when a new
+    (read via its ``name``). Add another ``isinstance`` branch here when a new
     field-bearing element type is introduced.
     """
     fields: list[dict] = []
@@ -37,15 +37,15 @@ def collect_fields(root: BaseElement) -> list[dict]:
             {
                 "kind": "radio",
                 "name": root.name,
-                "options": [item.value for item in root.items],
+                "options": [option.value for option in root.question.options],
             }
         )
     elif isinstance(root, DateInput):
-        fields.append({"kind": "date", "id": root.id})
+        fields.append({"kind": "date", "id": root.name})
     elif isinstance(root, TextInput):
-        fields.append({"kind": "text", "id": root.id})
+        fields.append({"kind": "text", "id": root.name})
     elif isinstance(root, IntegerInput):
-        fields.append({"kind": "integer", "id": root.id})
+        fields.append({"kind": "integer", "id": root.name})
 
     for child in getattr(root, "elements", []):
         if isinstance(child, BaseElement):
