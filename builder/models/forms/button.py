@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import Field
 
-from models.basic.base_element import BaseElement
+from builder.models.basic.base_element import BaseElement
 
 
 class Button(BaseElement):

@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from models.basic.div import Div
+from builder.models.basic.div import Div
 
 
 class FormGroup2(Div):

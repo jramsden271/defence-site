@@ -1,7 +1,7 @@
 from pydantic import Field
 
-from models.basic.base_element import BaseElement
-from models.basic.p import P
+from builder.models.basic.base_element import BaseElement
+from builder.models.basic.p import P
 
 
 class ExpandingTextbox(BaseElement):

@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from models.basic.base_element import Conditional
+from builder.models.basic.base_element import Conditional
 
 
 class P(Conditional):

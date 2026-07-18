@@ -1,6 +1,6 @@
 from pydantic import Field, field_validator
 
-from models.basic.base_element import BaseElement, normalise_children
+from builder.models.basic.base_element import BaseElement, normalise_children
 
 
 class Form(BaseElement):

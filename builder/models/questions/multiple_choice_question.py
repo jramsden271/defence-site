@@ -1,7 +1,7 @@
 from pydantic import Field
 
-from models.questions.base_question import BaseQuestion
-from models.questions.question_option import QuestionOption
+from builder.models.questions.base_question import BaseQuestion
+from builder.models.questions.question_option import QuestionOption
 
 
 class MultipleChoiceQuestion(BaseQuestion):

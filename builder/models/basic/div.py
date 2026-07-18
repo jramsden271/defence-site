@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import Field, field_validator
 
-from models.basic.base_element import BaseElement, Conditional, normalise_children
+from builder.models.basic.base_element import BaseElement, Conditional, normalise_children
 
 
 class Div(Conditional):

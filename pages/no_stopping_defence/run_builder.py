@@ -1,35 +1,37 @@
 """
-Build test.html from Python element classes.
+Build dist/no_stopping_defence.html from Python element classes.
 
-Run from the ``builder`` directory:
+Run via the repo-root entry point:
 
-    python run_builder.py
+    python builder/run_master.py
 
-This produces ``test.html`` (one level up) that is functionally equivalent to
-``run.html``. Focus here on the *questions and answers* — questions (their
-label, help text and possible answers) are plain data; the control classes
-(``RadioGroup``, ``DateInput``, ...) render that data as HTML, and
-dependencies between questions are expressed with ``some_control.when("value")``.
+This produces ``dist/no_stopping_defence.html`` that is functionally
+equivalent to ``run.html``. Focus here on the *questions and answers* —
+questions (their label, help text and possible answers) are plain data; the
+control classes (``RadioGroup``, ``DateInput``, ...) render that data as
+HTML, and dependencies between questions are expressed with
+``some_control.when("value")``.
 """
 
 from pathlib import Path
 
-from field_manifest import write_manifest
-from help_text import load_help_text
-from models.basic.base_element import assign_names_from_globals
-from models.basic.div import Div
-from models.div.form_group import FormGroup
-from models.div.form_group_2 import FormGroup2
-from models.forms.button import Button
-from models.forms.date_input import DateInput
-from models.forms.form import Form
-from models.forms.radio.radio_group import RadioGroup
-from models.questions.multiple_choice_question import MultipleChoiceQuestion
-from models.questions.question_option import QuestionOption
-from models.questions.single_question import SingleQuestion
+from builder.field_manifest import write_manifest
+from builder.help_text import load_help_text
+from builder.models.basic.base_element import assign_names_from_globals
+from builder.models.basic.div import Div
+from builder.models.div.form_group import FormGroup
+from builder.models.div.form_group_2 import FormGroup2
+from builder.models.forms.button import Button
+from builder.models.forms.date_input import DateInput
+from builder.models.forms.form import Form
+from builder.models.forms.radio.radio_group import RadioGroup
+from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
+from builder.models.questions.question_option import QuestionOption
+from builder.models.questions.single_question import SingleQuestion
 
-script_dir = Path(__file__).parent
-page_dir = script_dir.parent / "pages" / "no_stopping_defence"
+page_dir = Path(__file__).parent
+repo_root = page_dir.parent.parent
+dist_dir = repo_root / "dist"
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -177,11 +179,12 @@ html += "\n" + form.to_html() + "\n"
 with open(layout_dir / "blocks" / "footer.html", "r", encoding="utf-8") as f:
     html += f.read()
 
-with open(script_dir.parent / "test.html", "w", encoding="utf-8") as f:
+output_path = dist_dir / "no_stopping_defence.html"
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(html)
 
-print(f"Wrote {script_dir.parent / 'test.html'}")
+print(f"Wrote {output_path}")
 
-manifest_path = script_dir.parent / "js" / "form_variables.js"
+manifest_path = dist_dir / "js" / "form_variables.js"
 write_manifest(form, manifest_path)
 print(f"Wrote {manifest_path}")

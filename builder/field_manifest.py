@@ -11,12 +11,12 @@ field shows up in ``form_variables.js`` the next time the builder runs.
 import json
 from pathlib import Path
 
-from models.basic.base_element import BaseElement
-from models.forms.date_input import DateInput
-from models.forms.form import Form
-from models.forms.integer_input import IntegerInput
-from models.forms.radio.radio_group import RadioGroup
-from models.forms.text_input import TextInput
+from builder.models.basic.base_element import BaseElement
+from builder.models.forms.date_input import DateInput
+from builder.models.forms.form import Form
+from builder.models.forms.integer_input import IntegerInput
+from builder.models.forms.radio.radio_group import RadioGroup
+from builder.models.forms.text_input import TextInput
 
 
 def collect_fields(root: BaseElement) -> list[dict]:

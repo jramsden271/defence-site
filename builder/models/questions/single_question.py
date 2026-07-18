@@ -1,4 +1,4 @@
-from models.questions.base_question import BaseQuestion
+from builder.models.questions.base_question import BaseQuestion
 
 
 class SingleQuestion(BaseQuestion):

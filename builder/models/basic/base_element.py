@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
-    from models.questions.base_question import HelpText
+    from builder.models.questions.base_question import HelpText
 
 
 class Dependency(BaseModel):
@@ -34,7 +34,7 @@ def normalise_children(value):
     ``elements=["some text"]``. Used as a ``mode="before"`` field validator.
     """
     # Imported lazily to avoid a circular import (P subclasses Conditional).
-    from models.basic.p import P
+    from builder.models.basic.p import P
 
     if isinstance(value, (str, BaseElement)):
         value = [value]
@@ -170,7 +170,7 @@ def render_help(help: "HelpText | None") -> str:
     if help is None or not help.body:
         return ""
 
-    from models.widgets.expanding_textbox import ExpandingTextbox
+    from builder.models.widgets.expanding_textbox import ExpandingTextbox
 
     textbox = (
         ExpandingTextbox(title=help.title, body=help.body)

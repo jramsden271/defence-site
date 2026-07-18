@@ -10,7 +10,7 @@ maps onto :class:`~models.questions.base_question.HelpText`.
 import json
 from pathlib import Path
 
-from models.questions.base_question import HelpText
+from builder.models.questions.base_question import HelpText
 
 
 def load_help_text(path: Path) -> dict[str, HelpText]:
