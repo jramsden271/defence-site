@@ -3,6 +3,27 @@ body {
     line-height: 1.6;
     margin: 0;
 }
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background-color: var(--color-bg-details);
+    border-bottom: 1px solid var(--color-border);
+}
+.site-logo {
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+}
+.page-header-nav a {
+    color: var(--color-primary);
+    font-weight: bold;
+    text-decoration: none;
+}
+.page-header-nav a:hover {
+    text-decoration: underline;
+}
 .page-content {
     max-width: 600px;
     margin: 40px auto;

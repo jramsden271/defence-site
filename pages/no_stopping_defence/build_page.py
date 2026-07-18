@@ -27,6 +27,7 @@ from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
+from pages.shared.layout.render_page import render_page
 
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
@@ -171,16 +172,25 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-layout_dir = page_dir / "layout"
+blocks_dir = page_dir / "layout" / "blocks"
 
-html = ""
-with open(layout_dir / "blocks" / "header.html", "r", encoding="utf-8") as f:
-    html += f.read()
 
-html += "\n" + form.to_html() + "\n"
+def _read(name: str) -> str:
+    return (blocks_dir / name).read_text(encoding="utf-8")
 
-with open(layout_dir / "blocks" / "footer.html", "r", encoding="utf-8") as f:
-    html += f.read()
+
+body_html = "\n".join([
+    _read("intro.html"),
+    form.to_html(),
+    _read("output_box.html"),
+])
+
+html = render_page(
+    title="No stopping defence generator",
+    body_html=body_html,
+    head_extra=_read("head_extra.html"),
+    body_end_extra=_read("page_script.html"),
+)
 
 dist_dir.mkdir(parents=True, exist_ok=True)
 
