@@ -1,16 +1,16 @@
 """
-Build dist/no_stopping_defence.html from Python element classes.
+Build dist/no_stopping_defence/no_stopping_defence.html from Python element
+classes.
 
 Run via the repo-root entry point:
 
-    python builder/run_master.py
+    python builder/build_everything.py
 
-This produces ``dist/no_stopping_defence.html`` that is functionally
-equivalent to ``run.html``. Focus here on the *questions and answers* —
-questions (their label, help text and possible answers) are plain data; the
-control classes (``RadioGroup``, ``DateInput``, ...) render that data as
-HTML, and dependencies between questions are expressed with
-``some_control.when("value")``.
+This produces a page functionally equivalent to ``run.html``. Focus here on
+the *questions and answers* — questions (their label, help text and possible
+answers) are plain data; the control classes (``RadioGroup``, ``DateInput``,
+...) render that data as HTML, and dependencies between questions are
+expressed with ``some_control.when("value")``.
 """
 
 from pathlib import Path
@@ -32,6 +32,10 @@ from builder.models.questions.single_question import SingleQuestion
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
 dist_dir = repo_root / "dist"
+# This page's own output folder — holds its HTML plus its page-specific JS
+# (generate_text.js, pofa_date.js, the generated form_variables.js). Shared
+# assets (css/, resources/) stay directly under dist_dir.
+page_output_dir = dist_dir / "no_stopping_defence"
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -179,12 +183,15 @@ html += "\n" + form.to_html() + "\n"
 with open(layout_dir / "blocks" / "footer.html", "r", encoding="utf-8") as f:
     html += f.read()
 
-output_path = dist_dir / "no_stopping_defence.html"
+page_output_dir.mkdir(parents=True, exist_ok=True)
+
+output_path = page_output_dir / "no_stopping_defence.html"
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Wrote {output_path}")
 
-manifest_path = dist_dir / "js" / "form_variables.js"
+manifest_path = page_output_dir / "js" / "form_variables.js"
+manifest_path.parent.mkdir(parents=True, exist_ok=True)
 write_manifest(form, manifest_path)
 print(f"Wrote {manifest_path}")

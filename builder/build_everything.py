@@ -3,11 +3,10 @@ Entry point for building the website.
 
 Run from anywhere:
 
-    python builder/run_master.py
+    python builder/build_everything.py
 
-Builds every page by running each page's ``run_builder.py``. Currently
-there's just the one page; as more are added, this is where they all get
-built from.
+Builds every page by running each page's ``build_page.py``. Add a new
+page's ``build_page.py`` to ``PAGE_BUILDERS`` below to include it.
 """
 
 import runpy
@@ -16,13 +15,14 @@ from pathlib import Path
 
 repo_root = Path(__file__).parent.parent
 
-# run_builder.py files import from the `builder` package via absolute
+# build_page.py files import from the `builder` package via absolute
 # imports (e.g. `from builder.models.basic.div import Div`), so the repo
 # root — not `builder/` itself — needs to be on sys.path for those to resolve.
 sys.path.insert(0, str(repo_root))
 
 PAGE_BUILDERS = [
-    repo_root / "pages" / "no_stopping_defence" / "run_builder.py",
+    repo_root / "pages" / "index" / "build_page.py",
+    repo_root / "pages" / "no_stopping_defence" / "build_page.py",
 ]
 
 for page_builder in PAGE_BUILDERS:
