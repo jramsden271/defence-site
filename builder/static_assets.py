@@ -2,9 +2,9 @@
 Copies a hand-authored static asset (CSS, JS, images, ...) into ``dist/``
 at build time. ``dist/`` is pure build output — nothing should be authored
 directly inside it — so every CSS/JS/image file has a source location
-under ``pages/shared/`` (used by more than one page) or under a specific
-page's own folder (used by only that page), and gets copied into ``dist/``
-from there.
+under ``page_templates/shared/`` (used across templates/pages) or under a
+specific page's own folder (used by only that page), and gets copied into
+``dist/`` from there.
 """
 
 from pathlib import Path

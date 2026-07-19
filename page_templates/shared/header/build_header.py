@@ -1,10 +1,10 @@
 """
-Builds the shared site header, for other pages to inject into their own
+Builds the shared site header, for templates to inject into their own
 output.
 
-Usage from another page's ``build_page.py``::
+Usage from a template's render module::
 
-    from pages.shared.header.build_header import render_header
+    from page_templates.shared.header.build_header import render_header
 
     html += render_header()
 """

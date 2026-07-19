@@ -3,7 +3,7 @@ Copies the site-wide shared CSS (used by every page) into ``dist/css/``.
 
 Usage from the top-level build (``builder/build_everything.py``)::
 
-    from pages.shared.css.build_css import write_shared_css
+    from page_templates.shared.css.build_css import write_shared_css
 
     write_shared_css(dist_dir)
 """

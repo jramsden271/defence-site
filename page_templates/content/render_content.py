@@ -1,28 +1,31 @@
 """
-Shared page skeleton: the ``<html>``/``<head>`` boilerplate, the shared
-header and footer, and the ``page-content`` wrapper, common to every page.
+The ``content`` template: the base page type every other template composes
+with. Provides the ``<html>``/``<head>`` boilerplate, the shared header and
+footer, and a ``page-content`` wrapper, common to every page on the site.
 
-A page's own ``build_page.py`` builds only its own content (page title,
-any extra ``<head>`` tags it needs, its body HTML, and — if it has
-page-specific JS that must run after the footer — a closing script block),
-then calls :func:`render_page` to assemble the full document. This way, no
-page can forget the header/footer, get the skeleton's tags mismatched, or
-diverge in shared boilerplate (favicon, shared CSS, viewport meta, ...).
+A page (or a more specific template, e.g. ``defence_generator``) supplies
+only its own content (page title, any extra ``<head>`` tags it needs, its
+body HTML, and — if it has JS that must run after the footer — a closing
+script block), then calls :func:`render_content` to assemble the full
+document. This way, no page can forget the header/footer, get the skeleton's
+tags mismatched, or diverge in shared boilerplate (favicon, shared CSS,
+viewport meta, ...).
 
-Usage from a page's ``build_page.py``::
+Usage from a page's ``build_page.py`` (or a template built on top of this
+one)::
 
-    from pages.shared.layout.render_page import render_page
+    from page_templates.content.render_content import render_content
 
-    html = render_page(
+    html = render_content(
         title="My Page",
         head_extra='<script src="resources/my_page/js/thing.js" defer></script>',
         body_html="<h2>My Page</h2><p>...</p>",
     )
 """
 
-from pages.shared.footer.build_footer import render_footer
-from pages.shared.header.build_header import render_header
-from pages.shared.theme.build_theme import render_theme_init_script
+from page_templates.shared.footer.build_footer import render_footer
+from page_templates.shared.header.build_header import render_header
+from page_templates.shared.theme.build_theme import render_theme_init_script
 
 # Boilerplate every page needs: charset/viewport meta, favicon, the
 # site-wide shared CSS, and the theme-init script (must run synchronously,
@@ -39,7 +42,7 @@ _SHARED_HEAD = f"""\
 {render_theme_init_script()}"""
 
 
-def render_page(
+def render_content(
     title: str,
     body_html: str,
     head_extra: str = "",

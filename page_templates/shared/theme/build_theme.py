@@ -4,16 +4,16 @@ script (embedded directly into every page's ``<head>``) and the deferred
 ``theme.js`` file (the toggle button's click behaviour), copied once into
 ``dist/js/``.
 
-Usage from ``pages/shared/layout/render_page.py``::
+Usage from ``page_templates/content/render_content.py``::
 
-    from pages.shared.theme.build_theme import render_theme_init_script
+    from page_templates.shared.theme.build_theme import render_theme_init_script
 
     head_extra = render_theme_init_script() + ...
 
 And once, from the top-level build (``builder/build_everything.py``), to
 place the shared ``theme.js`` file into ``dist/js/``::
 
-    from pages.shared.theme.build_theme import write_theme_js
+    from page_templates.shared.theme.build_theme import write_theme_js
 
     write_theme_js(dist_dir)
 """

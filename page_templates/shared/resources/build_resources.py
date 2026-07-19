@@ -3,7 +3,7 @@ Copies the site-wide shared resources (favicon, ...) into ``dist/resources/``.
 
 Usage from the top-level build (``builder/build_everything.py``)::
 
-    from pages.shared.resources.build_resources import write_shared_resources
+    from page_templates.shared.resources.build_resources import write_shared_resources
 
     write_shared_resources(dist_dir)
 """

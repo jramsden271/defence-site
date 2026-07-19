@@ -14,7 +14,7 @@ of tool links), this can adopt the same Python-element-tree approach as
 
 from pathlib import Path
 
-from pages.shared.layout.render_page import render_page
+from page_templates.content.render_content import render_content
 
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
@@ -23,7 +23,7 @@ dist_dir = repo_root / "dist"
 with open(page_dir / "blocks" / "index.html", "r", encoding="utf-8") as f:
     body_html = f.read()
 
-html = render_page(title="Defence generators", body_html=body_html)
+html = render_content(title="Defence generators", body_html=body_html)
 
 dist_dir.mkdir(parents=True, exist_ok=True)
 

@@ -28,7 +28,7 @@ from builder.models.questions.multiple_choice_question import MultipleChoiceQues
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
 from builder.static_assets import copy_static_asset
-from pages.shared.layout.render_page import render_page
+from page_templates.content.render_content import render_content
 
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
@@ -196,7 +196,7 @@ body_html = "\n".join([
     _read("output_box.html"),
 ])
 
-html = render_page(
+html = render_content(
     title="No stopping defence generator",
     body_html=body_html,
     head_extra=_read("head_extra.html"),

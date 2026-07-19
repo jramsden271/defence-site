@@ -4,7 +4,7 @@ templating) into ``dist/js/``.
 
 Usage from the top-level build (``builder/build_everything.py``)::
 
-    from pages.shared.js.build_js import write_shared_js
+    from page_templates.shared.js.build_js import write_shared_js
 
     write_shared_js(dist_dir)
 """

@@ -1,10 +1,10 @@
 """
-Builds the shared site footer, for other pages to inject into their own
+Builds the shared site footer, for templates to inject into their own
 output.
 
-Usage from another page's ``build_page.py``::
+Usage from a template's render module::
 
-    from pages.shared.footer.build_footer import render_footer
+    from page_templates.shared.footer.build_footer import render_footer
 
     html += render_footer()
 """
