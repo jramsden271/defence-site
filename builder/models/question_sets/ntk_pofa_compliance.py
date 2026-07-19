@@ -66,8 +66,10 @@ dependencies off them or drop them into a custom layout instead of calling
 from builder.models.basic.base_element import BaseElement
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.radio.radio_group import RadioGroup
+from builder.models.forms.text_input import TextInput
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.single_question import SingleQuestion
+from builder.models.div.form_group_2 import FormGroup2
 
 
 class NtkPofaComplianceQuestions:
@@ -129,6 +131,10 @@ class NtkPofaComplianceQuestions:
 
         self.ntk_states_land = RadioGroup(question=ntk_states_land_q)
 
+        ntk_incident_address_q = SingleQuestion(display_question="What location was specified on the NtK?")
+        self.ntk_incident_address = TextInput(question=ntk_incident_address_q)
+
+
 
     def elements(self) -> list[str | BaseElement]:
         """The raw NtK compliance-question controls (date, parking period,
@@ -141,4 +147,5 @@ class NtkPofaComplianceQuestions:
             self.ntk_has_parking_period,
             self.ntk_complies_with_para_9_4,
             self.ntk_states_land,
+            FormGroup2(show_when=self.ntk_states_land.when("vaguely"),elements=[self.ntk_incident_address])
         ]

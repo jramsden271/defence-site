@@ -42,6 +42,10 @@ const FORM_FIELDS = [
       "wrong",
       "no"
     ]
+  },
+  {
+    "kind": "text",
+    "id": "ntkIncidentAddress"
   }
 ];
 
