@@ -2,10 +2,10 @@
 // Regenerate by running build_page.py.
 //
 // Lists every named, value-bearing field rendered into the form, so
-// generate_text.js can read current answers without hardcoding each
-// field's name/id by hand. Radio fields also list their `options`
-// (the possible values), so callers can see the answer set without
-// hardcoding it either.
+// a page's generate-defence JS can read current answers without
+// hardcoding each field's name/id by hand. Radio fields also list
+// their `options` (the possible values), so callers can see the
+// answer set without hardcoding it either.
 
 const FORM_FIELDS = [
   {

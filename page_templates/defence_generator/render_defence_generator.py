@@ -11,10 +11,10 @@ header/footer.
 
 A defence-generator page's own ``build_page.py`` supplies only what's
 actually specific to that page: its questions (a ``Form`` built from
-``builder.models.forms.*``), its intro copy, and its own JS/CSS (e.g. the
-``generate_text.js`` equivalent), authored under that page's own ``js/``
-and ``css/`` folders — every file there is picked up automatically, no
-list to maintain. Everything common to every defence-generator page — the
+``builder.models.forms.*``), its intro copy, and its own JS/CSS (e.g. its
+``generate_defence.js``), authored under that page's own ``js/`` and
+``css/`` folders — every file there is picked up automatically, no list to
+maintain. Everything common to every defence-generator page — the
 output box markup and its rendering behaviour, the radio-button styling,
 the copy-to-clipboard/conditional-visibility/PoFA-date wiring, and the
 generated field manifest (``form_variables.js``) — is handled here, once,

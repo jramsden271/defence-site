@@ -14,7 +14,7 @@ their label, help text and possible answers — are plain data; the control
 classes (``RadioGroup``, ``DateInput``, ...) render that data as HTML, and
 dependencies between questions are expressed with
 ``some_control.when("value")``), the intro copy, and this page's own JS
-(``generate_text.js``).
+(``generate_defence.js``).
 """
 
 from pathlib import Path
@@ -165,7 +165,7 @@ form = Form(
             ],
         ),
         # Submit
-        Button(text="Generate Defence", onclick="generateText()", extra_css_classes=["btn-center"]),
+        Button(text="Generate Defence", onclick="generateDefence()", extra_css_classes=["btn-center"]),
     ],
 )
 

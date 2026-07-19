@@ -1,4 +1,4 @@
-function generateText() {
+function generateDefence() {
 
     // All named, value-bearing form fields (see js/form_variables.js,
     // auto-generated from the Python form definition).

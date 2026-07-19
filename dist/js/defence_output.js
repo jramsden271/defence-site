@@ -6,10 +6,10 @@
 // #pofaResultsContainer, #copyBtn, #charCount) and form_variables.js's
 // collectFormValues().
 //
-// A page's own generate_text.js should call this instead of touching the
-// output box directly:
+// A page's own generate_defence.js should call this instead of touching
+// the output box directly:
 //
-//     function generateText() {
+//     function generateDefence() {
 //         const formValues = collectFormValues();
 //         ... build `paragraphs` (array of strings) ...
 //         ... optionally compute `pofaResult` via isNoticeToKeeperInTime() ...
