@@ -182,7 +182,7 @@ html = render_defence_generator(
     intro_html=intro_html,
     form=form,
     dist_dir=dist_dir,
-    page_js_files=[page_dir / "js" / "generate_text.js"],
+    page_dir=page_dir,
 )
 
 dist_dir.mkdir(parents=True, exist_ok=True)
