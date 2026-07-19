@@ -14,10 +14,9 @@ from builder.static_assets import copy_static_asset
 
 MODULE_DIR = Path(__file__).parent
 
-_FILES = ["colours.css", "style.css"]
-
 
 def write_shared_css(dist_dir: Path) -> None:
-    """Copy every shared CSS file into ``dist/css/``."""
-    for name in _FILES:
-        copy_static_asset(MODULE_DIR / name, dist_dir, f"css/{name}")
+    """Copy every ``.css`` file in this folder into ``dist/css/``. Add a new
+    shared CSS file here and it's picked up automatically — no list to update."""
+    for source_path in sorted(MODULE_DIR.glob("*.css")):
+        copy_static_asset(source_path, dist_dir, f"css/{source_path.name}")
