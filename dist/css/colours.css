@@ -37,11 +37,11 @@
   --color-success: #3dd160;
 
   --color-border: #444950;
-  --color-bg: #121417;
-  --color-bg-details: #1e2126;
-  --color-bg-output: #1a1d22;
+  --color-bg: #1e1e1e;
+  --color-bg-details: #2d2d30;
+  --color-bg-output: #252526;
 
-  --color-text: #e9ecef;
-  --color-text-muted: #adb5bd;
+  --color-text: #d4d4d4;
+  --color-text-muted: #9a9a9a;
   --color-text-on-dark: white;
 }
