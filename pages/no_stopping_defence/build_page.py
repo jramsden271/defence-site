@@ -28,6 +28,7 @@ from builder.models.forms.button import Button
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
 from builder.models.forms.radio.radio_group import RadioGroup
+from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQuestions
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
@@ -91,17 +92,14 @@ has_incident_date = RadioGroup(
     ),
 )
 
-received_ntk_q = MultipleChoiceQuestion(display_question="Did you receive a Notice to Keeper (NtK)?")
-received_ntk_q.add_yes_no_options()
-received_ntk = RadioGroup(question=received_ntk_q)
-
-ntk_has_parking_period_q = MultipleChoiceQuestion(display_question="Does the NtK show a parking period?")
-ntk_has_parking_period_q.add_yes_no_options()
-ntk_has_parking_period_q.set_help(HELP["parking_period"])
-ntk_has_parking_period = RadioGroup(question=ntk_has_parking_period_q)
+# The standard NtK/PoFA-compliance question block (received_ntk, ntk_date,
+# ntk_has_parking_period), shared with every defence-generator page that
+# needs it. This page adds a no-stopping-specific addendum to the parking
+# period question's help text.
+ntk = NtkPofaComplianceQuestions()
+ntk.ntk_has_parking_period.question.set_help(HELP["parking_period_no_stopping"])
 
 incident_date = DateInput(question=SingleQuestion(display_question="Date of the incident:"))
-ntk_date = DateInput(question=SingleQuestion(display_question="Issue date of the Notice to Keeper (NtK):"))
 
 
 # Backfill each control's `name` (used as the HTML name/id and data-trigger
@@ -141,28 +139,7 @@ form = Form(
         # Notice to Keeper (keeper only)
         Div(
             show_when=defend_as.when("keeper"),
-            elements=[
-                FormGroup(elements=[received_ntk]),
-                FormGroup2(
-                    show_when=received_ntk.when("yes"),
-                    elements=[
-                        "The NtK must meet some strict requirements to allow "
-                        "liability to be transferred from the driver to the "
-                        "keeper. These questions will help establish whether it "
-                        "meets those requirements.",
-                        ntk_date,
-                        ntk_has_parking_period,
-                    ],
-                ),
-                FormGroup2(
-                    show_when=received_ntk.when("no"),
-                    elements=[
-                        "This form is currently set up for defendants who have "
-                        "received a Notice to Keeper (NtK). This form is currently "
-                        "not set up for Notice to Hirer (NtH)."
-                    ],
-                ),
-            ],
+            elements=ntk.elements(),
         ),
         # Submit
         Button(text="Generate Defence", onclick="generateDefence()", extra_css_classes=["btn-center"]),
