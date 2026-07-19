@@ -1,3 +1,11 @@
+/* Smoothly crossfade every themed color when the dark/light toggle
+   switches data-theme, instead of the palette snapping instantly.
+   Scoped to color/background/border so layout-affecting properties
+   (width, padding, ...) are never accidentally animated. */
+*, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
