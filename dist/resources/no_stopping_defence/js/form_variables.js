@@ -66,6 +66,30 @@ const FORM_FIELDS = [
       "yes",
       "no"
     ]
+  },
+  {
+    "kind": "radio",
+    "name": "ntkStatesKeeperLiability",
+    "options": [
+      "yes",
+      "no"
+    ]
+  },
+  {
+    "kind": "radio",
+    "name": "ntkStatesSumPayable",
+    "options": [
+      "yes",
+      "no"
+    ]
+  },
+  {
+    "kind": "radio",
+    "name": "ntkRefersToTerms",
+    "options": [
+      "yes",
+      "no"
+    ]
   }
 ];
 

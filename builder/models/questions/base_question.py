@@ -6,7 +6,7 @@ class HelpText(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    title: str | None = Field(default=None, description="Title/summary for the help block, if any.")
+    title: str | None = Field(default="Help", description="Title/summary for the help block, if any.")
     body: str = Field(default="", description="Help text; empty means no help.")
 
 
@@ -34,7 +34,10 @@ class BaseQuestion(BaseModel):
         """
         self.help = HelpText(title=title, body=body)
 
-    def set_help(self, help_text: HelpText) -> None:
+    def set_help(self, help_text: HelpText|str) -> None:
         """Set this question's help text from an existing :class:`HelpText`
         (e.g. one loaded from a page's ``help_text.json``)."""
-        self.help = help_text
+        if isinstance(help_text, str):
+            self.help = HelpText(body=help_text)
+        else:
+            self.help = help_text

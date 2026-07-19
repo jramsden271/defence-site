@@ -169,16 +169,69 @@
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="ntkHasParkingPeriod_yes" name="ntkHasParkingPeriod" value="yes">
 <label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="ntkHasParkingPeriod_yes">Yes</label>
-</div>
+<div class="govuk-hint">May include "parking period", "period of parking", "start and end time", or "duration of parking"</div></div>
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="ntkHasParkingPeriod_no" name="ntkHasParkingPeriod" value="no">
 <label class="govuk-radio-label" style="display:inline;" for="ntkHasParkingPeriod_no">No</label>
 </div>
 </div>
 <details>
-<summary>What is a parking period?</summary>
+<summary>Help</summary>
 <div class="help-content">
-<p>A valid NtK must show a parking period, which is the time during which the vehicle was parked and the alleged incident occurred. This is usually shown as a start and end time, or a total duration of parking. For no-stopping cases, it is unlikely that the NtK meets this requirement.</p>
+<p>PoFA does not provide much guidance on what constitutes a parking period, so this is a bit of a grey zone.</p>
+<p>If the NtK shows some kind of a start or an end time, or a parking duration, then this is likely valid, so choose 'yes'.</p>
+<p>If the NtK shows a single time, or a single time with the phrase like 'the period immediately preceding', then this can be contested, so choose 'no'.</p>
+</div>
+</details>
+<label for="ntkStatesKeeperLiability">Does the NtK state that the keeper is liable if the driver's details aren't known?</label>
+<div class="radio-group govuk-radio-group" data-trigger="ntkStatesKeeperLiabilityTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkStatesKeeperLiability_yes" name="ntkStatesKeeperLiability" value="yes">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="ntkStatesKeeperLiability_yes">Yes</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkStatesKeeperLiability_no" name="ntkStatesKeeperLiability" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="ntkStatesKeeperLiability_no">No</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>For liability to transfer from driver to keeper, the NtK must invite the keeper to either pay the charge or identify the driver, and warn that if neither happens, the keeper will be held liable for the charge as if they were the driver.</p>
+</div>
+</details>
+<label for="ntkStatesSumPayable">Does the NtK specify the total sum payable, including any discount or increase terms?</label>
+<div class="radio-group govuk-radio-group" data-trigger="ntkStatesSumPayableTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkStatesSumPayable_yes" name="ntkStatesSumPayable" value="yes">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="ntkStatesSumPayable_yes">Yes</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkStatesSumPayable_no" name="ntkStatesSumPayable" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="ntkStatesSumPayable_no">No</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>A valid NtK must specify the amount of the unpaid parking charge as at the date of the notice, and set out how that sum may be reduced (e.g. an early-payment discount) or increased (e.g. after a further period of non-payment).</p>
+</div>
+</details>
+<label for="ntkRefersToTerms">Does the NtK refer to the terms and conditions displayed on site (e.g. on signage), and say where they can be inspected?</label>
+<div class="radio-group govuk-radio-group" data-trigger="ntkRefersToTermsTrigger">
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkRefersToTerms_yes" name="ntkRefersToTerms" value="yes">
+<label class="govuk-radio-label" style="display:inline; margin-right:15px;" for="ntkRefersToTerms_yes">Yes</label>
+</div>
+<div class="govuk-radio-item">
+<input class="govuk-radio-input" type="radio" id="ntkRefersToTerms_no" name="ntkRefersToTerms" value="no">
+<label class="govuk-radio-label" style="display:inline;" for="ntkRefersToTerms_no">No</label>
+</div>
+</div>
+<details>
+<summary>Help</summary>
+<div class="help-content">
+<p>A valid NtK must refer to the presence and location of the parking terms and conditions (e.g. signage on site) that the driver is alleged to have breached, and explain how a copy of those terms may be obtained or inspected.</p>
 </div>
 </details>
 </div>

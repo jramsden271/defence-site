@@ -97,7 +97,6 @@ has_incident_date = RadioGroup(
 # needs it. This page adds a no-stopping-specific addendum to the parking
 # period question's help text.
 ntk = NtkPofaComplianceQuestions()
-ntk.ntk_has_parking_period.question.set_help(HELP["parking_period_no_stopping"])
 
 incident_date = DateInput(question=SingleQuestion(display_question="Date of the incident:"))
 
