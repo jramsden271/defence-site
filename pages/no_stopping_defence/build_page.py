@@ -14,8 +14,7 @@ their label, help text and possible answers — are plain data; the control
 classes (``RadioGroup``, ``DateInput``, ...) render that data as HTML, and
 dependencies between questions are expressed with
 ``some_control.when("value")``), the intro copy, and this page's own JS
-(``generate_text.js``, plus the shared ``pofa_date.js`` this defence's PoFA
-timing check depends on).
+(``generate_text.js``).
 """
 
 from pathlib import Path
@@ -177,10 +176,6 @@ form = Form(
 
 intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
 
-# This defence's PoFA notice-to-keeper timing check needs the shared
-# pofa_date.js, on top of what every defence-generator page already gets.
-extra_head = '    <script src="js/pofa_date.js" defer></script>'
-
 html = render_defence_generator(
     title="No stopping defence generator",
     page_name="no_stopping_defence",
@@ -188,7 +183,6 @@ html = render_defence_generator(
     form=form,
     dist_dir=dist_dir,
     page_js_files=[page_dir / "js" / "generate_text.js"],
-    extra_head=extra_head,
 )
 
 dist_dir.mkdir(parents=True, exist_ok=True)

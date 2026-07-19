@@ -11,11 +11,10 @@ header/footer.
 
 A defence-generator page's own ``build_page.py`` supplies only what's
 actually specific to that page: its questions (a ``Form`` built from
-``builder.models.forms.*``), its intro copy, its own JS (the
-``generate_text.js`` equivalent) and, optionally, extra page-specific
-``<head>`` markup (e.g. if it needs ``pofa_date.js``). Everything common to
-every defence-generator page — the output box markup, the radio-button
-styling, the copy-to-clipboard/conditional-visibility wiring, and the
+``builder.models.forms.*``), its intro copy, and its own JS (the
+``generate_text.js`` equivalent). Everything common to every
+defence-generator page — the output box markup, the radio-button styling,
+the copy-to-clipboard/conditional-visibility/PoFA-date wiring, and the
 generated field manifest (``form_variables.js``) — is handled here, once,
 so no page has to repeat it.
 
@@ -32,7 +31,6 @@ Usage from a page's ``build_page.py``::
         form=form,
         dist_dir=dist_dir,
         page_js_files=[page_dir / "js" / "generate_text.js"],
-        extra_head="<script src=\"js/pofa_date.js\" defer></script>",
     )
 """
 
@@ -57,7 +55,6 @@ def render_defence_generator(
     form: Form,
     dist_dir: Path,
     page_js_files: list[Path] = [],
-    extra_head: str = "",
 ) -> str:
     """Assemble a full defence-generator page and write its generated
     assets (field manifest, template-owned CSS/JS) into ``dist_dir``.
@@ -73,10 +70,6 @@ def render_defence_generator(
     :param page_js_files: The page's own JS files (e.g. its
         ``generate_text.js``), copied into
         ``dist/resources/<page_name>/js/``.
-    :param extra_head: Extra ``<head>`` markup the page needs beyond what
-        every defence-generator page already gets (e.g. a
-        ``<script src="js/pofa_date.js">`` tag, for pages that need PoFA
-        date logic).
     """
     copy_static_asset(TEMPLATE_DIR / "css" / "radio.css", dist_dir, "css/radio.css")
 
@@ -97,12 +90,9 @@ def render_defence_generator(
         '    <link rel="stylesheet" href="css/radio.css">',
         '    <script src="js/copy_to_clipboard.js" defer></script>',
         '    <script src="js/conditional_visibility.js" defer></script>',
+        '    <script src="js/pofa_date.js" defer></script>',
+        f'    <script src="resources/{page_name}/js/form_variables.js" defer></script>',
     ]
-    if extra_head:
-        head_extra_lines.append(extra_head)
-    head_extra_lines.append(
-        f'    <script src="resources/{page_name}/js/form_variables.js" defer></script>'
-    )
     if page_js_tags:
         head_extra_lines.append(page_js_tags)
     head_extra = "\n".join(head_extra_lines)
