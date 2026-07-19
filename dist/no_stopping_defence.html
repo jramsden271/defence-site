@@ -18,9 +18,11 @@
     </script>
 
     <link rel="stylesheet" href="css/radio.css">
+    <script src="js/copy_to_clipboard.js" defer></script>
+    <script src="js/conditional_visibility.js" defer></script>
+    <script src="js/pofa_date.js" defer></script>
     <script src="resources/no_stopping_defence/js/form_variables.js" defer></script>
     <script src="resources/no_stopping_defence/js/generate_text.js" defer></script>
-    <script src="resources/no_stopping_defence/js/pofa_date.js" defer></script>
 
 
     <title>No stopping defence generator</title>
@@ -212,48 +214,6 @@
     <footer class="page-footer">
         <p>&copy; 2026 [Company Name]. All rights reserved.</p>
     </footer>
-
-    <script>
-        // --- CLIPBOARD COPIER FUNCTION ---
-        function copyToClipboard() {
-            const copyBtn = document.getElementById('copyBtn');
-
-            // Check if there is data to copy
-            if (!rawPlainTextOutput) return;
-
-            // Use browser clipboard API
-            navigator.clipboard.writeText(rawPlainTextOutput)
-                .then(() => {
-                    // Visual feedback change to indicate success
-                    copyBtn.textContent = "Copied! ✓";
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                    alert("Could not copy text automatically. Please select it manually.");
-                });
-        }
-
-        document.getElementById('profileForm').addEventListener('change', function(event) {
-            // 1. Find if the changed field belongs to a managed trigger group
-            const triggerContainer = event.target.closest('[data-trigger]');
-            if (!triggerContainer) return;
-
-            const triggerId = triggerContainer.getAttribute('data-trigger');
-
-            // 2. Safely grab the current value whether it's a dropdown or a radio button
-            const currentValue = event.target.type === 'radio'
-                ? triggerContainer.querySelector('input:checked').value
-                : event.target.value;
-
-            // 3. Find and toggle all dependent elements instantly
-            document.querySelectorAll(`[data-depends-on="${triggerId}"]`).forEach(field => {
-                const targetValue = field.getAttribute('data-value');
-
-                // If values match, set display to 'block', otherwise set it to 'none'
-                field.style.display = (currentValue === targetValue) ? 'block' : 'none';
-            });
-        });
-    </script>
 
 
 </body>

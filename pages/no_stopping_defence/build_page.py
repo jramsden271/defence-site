@@ -27,6 +27,7 @@ from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
+from builder.static_assets import copy_static_asset
 from pages.shared.layout.render_page import render_page
 
 page_dir = Path(__file__).parent
@@ -36,6 +37,16 @@ dist_dir = repo_root / "dist"
 # per-page subfolders). Page-specific resources (JS, ...) go under
 # dist/resources/<page>/ instead, alongside the site's shared resources.
 page_resources_dir = dist_dir / "resources" / "no_stopping_defence"
+
+# This page's own CSS/JS (not used by any other page) is authored here,
+# under pages/no_stopping_defence/, and copied into dist/ at build time —
+# dist/ itself holds only generated output.
+copy_static_asset(page_dir / "css" / "radio.css", dist_dir, "css/radio.css")
+copy_static_asset(
+    page_dir / "js" / "generate_text.js",
+    dist_dir,
+    "resources/no_stopping_defence/js/generate_text.js",
+)
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -172,7 +183,7 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-blocks_dir = page_dir / "layout" / "blocks"
+blocks_dir = page_dir / "blocks"
 
 
 def _read(name: str) -> str:
@@ -189,7 +200,6 @@ html = render_page(
     title="No stopping defence generator",
     body_html=body_html,
     head_extra=_read("head_extra.html"),
-    body_end_extra=_read("page_script.html"),
 )
 
 dist_dir.mkdir(parents=True, exist_ok=True)
