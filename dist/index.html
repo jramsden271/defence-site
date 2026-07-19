@@ -6,6 +6,17 @@
     <link rel="icon" type="image/x-icon" href="resources/car_icon_150909.ico">
     <link rel="stylesheet" href="css/colours.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js" defer></script>
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var theme = saved === 'dark' || saved === 'light'
+                ? saved
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
 
     <title>Defence generators</title>
 </head>
@@ -15,6 +26,7 @@
         <a href="index.html" class="site-logo" aria-label="Home">🚗</a>
         <nav class="page-header-nav">
             <a href="no_stopping_defence.html">No stopping defence generator</a>
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode"></button>
         </nav>
     </header>
 

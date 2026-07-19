@@ -6,6 +6,17 @@
     <link rel="icon" type="image/x-icon" href="resources/car_icon_150909.ico">
     <link rel="stylesheet" href="css/colours.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js" defer></script>
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var theme = saved === 'dark' || saved === 'light'
+                ? saved
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
     <link rel="stylesheet" href="css/radio.css">
     <script src="resources/no_stopping_defence/js/form_variables.js" defer></script>
     <script src="resources/no_stopping_defence/js/generate_text.js" defer></script>
@@ -20,6 +31,7 @@
         <a href="index.html" class="site-logo" aria-label="Home">🚗</a>
         <nav class="page-header-nav">
             <a href="no_stopping_defence.html">No stopping defence generator</a>
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode"></button>
         </nav>
     </header>
 
@@ -186,7 +198,7 @@
         <!-- Container where HTML elements will be injected dynamically -->
         <div id="paragraphsContainer"></div>
 
-        <div id="charCount" style="font-size: 14px; color: #6c757d; margin-bottom: 10px; font-weight: bold;">
+        <div id="charCount" style="font-size: 14px; color: var(--color-text-muted); margin-bottom: 10px; font-weight: bold;">
             Character Count: 0
         </div>
 

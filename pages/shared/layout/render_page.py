@@ -22,16 +22,21 @@ Usage from a page's ``build_page.py``::
 
 from pages.shared.footer.build_footer import render_footer
 from pages.shared.header.build_header import render_header
+from pages.shared.theme.build_theme import render_theme_init_script
 
-# Boilerplate every page needs: charset/viewport meta, favicon, and the
-# site-wide shared CSS. Page-specific <head> additions (title, extra
-# stylesheets/scripts) are passed in via `head_extra`.
-_SHARED_HEAD = """\
+# Boilerplate every page needs: charset/viewport meta, favicon, the
+# site-wide shared CSS, and the theme-init script (must run synchronously,
+# before first paint, so the page never flashes the wrong theme — see
+# render_theme_init_script's docstring). Page-specific <head> additions
+# (title, extra stylesheets/scripts) are passed in via `head_extra`.
+_SHARED_HEAD = f"""\
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="resources/car_icon_150909.ico">
     <link rel="stylesheet" href="css/colours.css">
-    <link rel="stylesheet" href="css/style.css">"""
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/theme.js" defer></script>
+{render_theme_init_script()}"""
 
 
 def render_page(

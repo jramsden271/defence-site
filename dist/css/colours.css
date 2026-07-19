@@ -4,19 +4,44 @@
   --color-primary-hover: #0056b3;   /* Darker blue for button hover states */
   --color-secondary: #6c757d;       /* Muted grey for secondary buttons */
   --color-secondary-hover: #5a6268; /* Darker grey for secondary button hover */
-  
+
   /* Status & Feedback Colors */
   --color-error: #DC3545;           /* Red for asterisks, error borders, and error text */
   --color-error-bg: #FFF5F5;        /* Very light pink/red for error backgrounds */
   --color-success: #28A745;         /* Green for success output border */
-  
+
   /* UI Borders & Neutral Backgrounds */
   --color-border: #ccc;             /* Light grey for standard inputs */
+  --color-bg: white;                /* Page background */
   --color-bg-details: #f1f3f5;      /* Grey background for <details> tag */
   --color-bg-output: #e9ecef;       /* Light grey background for output box */
-  
+
   /* Typography Colors */
   --color-text: #212529;            /* Dark grey for main text */
   --color-text-muted: #495057;      /* Charcoal for help text content */
   --color-text-on-dark: white;      /* White text for buttons */
+}
+
+/* Dark theme overrides. The theme-init script (see js/theme.js) sets
+   data-theme="dark"/"light" on <html> before first paint — from a saved
+   preference, or the OS/browser's prefers-color-scheme otherwise — so this
+   attribute is the single source of truth for which palette applies. */
+:root[data-theme="dark"] {
+  --color-primary: #3391ff;
+  --color-primary-hover: #5aa5ff;
+  --color-secondary: #8a939c;
+  --color-secondary-hover: #a1a9b1;
+
+  --color-error: #ff6b7a;
+  --color-error-bg: #3a1f22;
+  --color-success: #3dd160;
+
+  --color-border: #444950;
+  --color-bg: #121417;
+  --color-bg-details: #1e2126;
+  --color-bg-output: #1a1d22;
+
+  --color-text: #e9ecef;
+  --color-text-muted: #adb5bd;
+  --color-text-on-dark: white;
 }

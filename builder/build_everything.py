@@ -20,6 +20,14 @@ repo_root = Path(__file__).parent.parent
 # root — not `builder/` itself — needs to be on sys.path for those to resolve.
 sys.path.insert(0, str(repo_root))
 
+from pages.shared.theme.build_theme import write_theme_js  # noqa: E402
+
+dist_dir = repo_root / "dist"
+
+# Shared assets used by every page, written once here rather than by each
+# page's own build_page.py.
+write_theme_js(dist_dir)
+
 PAGE_BUILDERS = [
     repo_root / "pages" / "index" / "build_page.py",
     repo_root / "pages" / "no_stopping_defence" / "build_page.py",
