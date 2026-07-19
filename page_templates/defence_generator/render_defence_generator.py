@@ -15,10 +15,12 @@ actually specific to that page: its questions (a ``Form`` built from
 ``generate_text.js`` equivalent), authored under that page's own ``js/``
 and ``css/`` folders — every file there is picked up automatically, no
 list to maintain. Everything common to every defence-generator page — the
-output box markup, the radio-button styling, the copy-to-clipboard/
-conditional-visibility/PoFA-date wiring, and the generated field manifest
-(``form_variables.js``) — is handled here, once, so no page has to repeat
-it.
+output box markup and its rendering behaviour, the radio-button styling,
+the copy-to-clipboard/conditional-visibility/PoFA-date wiring, and the
+generated field manifest (``form_variables.js``) — is handled here, once,
+so no page has to repeat it. Add a new template-wide JS/CSS file under
+this folder's own ``js/``/``css/`` and it's picked up automatically, same
+as a page's own assets.
 
 Usage from a page's ``build_page.py``::
 
@@ -78,6 +80,10 @@ def render_defence_generator(
     """
     copy_static_asset(TEMPLATE_DIR / "css" / "radio.css", dist_dir, "css/radio.css")
 
+    template_js_files = sorted((TEMPLATE_DIR / "js").glob("*.js"))
+    for js_file in template_js_files:
+        copy_static_asset(js_file, dist_dir, f"js/{js_file.name}")
+
     page_resources_dir = dist_dir / "resources" / page_name
 
     page_js_files = sorted((page_dir / "js").glob("*.js"))
@@ -101,6 +107,11 @@ def render_defence_generator(
         for css_file in page_css_files
     )
 
+    template_js_tags = "\n".join(
+        f'    <script src="js/{js_file.name}" defer></script>'
+        for js_file in template_js_files
+    )
+
     head_extra_lines = [
         '    <link rel="stylesheet" href="css/radio.css">',
     ]
@@ -110,6 +121,7 @@ def render_defence_generator(
         '    <script src="js/copy_to_clipboard.js" defer></script>',
         '    <script src="js/conditional_visibility.js" defer></script>',
         '    <script src="js/pofa_date.js" defer></script>',
+        template_js_tags,
         f'    <script src="resources/{page_name}/js/form_variables.js" defer></script>',
     ]
     if page_js_tags:
