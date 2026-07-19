@@ -5,16 +5,21 @@ Run via the repo-root entry point:
 
     python builder/build_everything.py
 
-This produces a page functionally equivalent to ``run.html``. Focus here on
-the *questions and answers* — questions (their label, help text and possible
-answers) are plain data; the control classes (``RadioGroup``, ``DateInput``,
-...) render that data as HTML, and dependencies between questions are
-expressed with ``some_control.when("value")``.
+This is a ``defence_generator`` page (see
+``page_templates/defence_generator/render_defence_generator.py``): the
+output box, radio-button styling, and copy-to-clipboard/conditional-
+visibility wiring are all owned by that template. Focus here is only on
+what's specific to *this* defence: the questions and answers (questions —
+their label, help text and possible answers — are plain data; the control
+classes (``RadioGroup``, ``DateInput``, ...) render that data as HTML, and
+dependencies between questions are expressed with
+``some_control.when("value")``), the intro copy, and this page's own JS
+(``generate_text.js``, plus the shared ``pofa_date.js`` this defence's PoFA
+timing check depends on).
 """
 
 from pathlib import Path
 
-from builder.field_manifest import write_manifest
 from builder.help_text import load_help_text
 from builder.models.basic.base_element import assign_names_from_globals
 from builder.models.basic.div import Div
@@ -27,26 +32,13 @@ from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
-from builder.static_assets import copy_static_asset
-from page_templates.content.render_content import render_content
+from page_templates.defence_generator.render_defence_generator import (
+    render_defence_generator,
+)
 
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
 dist_dir = repo_root / "dist"
-# HTML pages always build directly into dist/ (keeps URLs tidy — no
-# per-page subfolders). Page-specific resources (JS, ...) go under
-# dist/resources/<page>/ instead, alongside the site's shared resources.
-page_resources_dir = dist_dir / "resources" / "no_stopping_defence"
-
-# This page's own CSS/JS (not used by any other page) is authored here,
-# under pages/no_stopping_defence/, and copied into dist/ at build time —
-# dist/ itself holds only generated output.
-copy_static_asset(page_dir / "css" / "radio.css", dist_dir, "css/radio.css")
-copy_static_asset(
-    page_dir / "js" / "generate_text.js",
-    dist_dir,
-    "resources/no_stopping_defence/js/generate_text.js",
-)
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -183,23 +175,20 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-blocks_dir = page_dir / "blocks"
+intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
 
+# This defence's PoFA notice-to-keeper timing check needs the shared
+# pofa_date.js, on top of what every defence-generator page already gets.
+extra_head = '    <script src="js/pofa_date.js" defer></script>'
 
-def _read(name: str) -> str:
-    return (blocks_dir / name).read_text(encoding="utf-8")
-
-
-body_html = "\n".join([
-    _read("intro.html"),
-    form.to_html(),
-    _read("output_box.html"),
-])
-
-html = render_content(
+html = render_defence_generator(
     title="No stopping defence generator",
-    body_html=body_html,
-    head_extra=_read("head_extra.html"),
+    page_name="no_stopping_defence",
+    intro_html=intro_html,
+    form=form,
+    dist_dir=dist_dir,
+    page_js_files=[page_dir / "js" / "generate_text.js"],
+    extra_head=extra_head,
 )
 
 dist_dir.mkdir(parents=True, exist_ok=True)
@@ -209,8 +198,3 @@ with open(output_path, "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Wrote {output_path}")
-
-manifest_path = page_resources_dir / "js" / "form_variables.js"
-manifest_path.parent.mkdir(parents=True, exist_ok=True)
-write_manifest(form, manifest_path)
-print(f"Wrote {manifest_path}")
