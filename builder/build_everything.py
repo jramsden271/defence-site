@@ -37,6 +37,7 @@ write_shared_js(dist_dir)
 PAGE_BUILDERS = [
     repo_root / "pages" / "index" / "build_page.py",
     repo_root / "pages" / "no_stopping_defence" / "build_page.py",
+    repo_root / "pages" / "ntk_compliance_check" / "build_page.py",
 ]
 
 for page_builder in PAGE_BUILDERS:
