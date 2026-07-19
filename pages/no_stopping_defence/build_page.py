@@ -92,10 +92,10 @@ has_incident_date = RadioGroup(
     ),
 )
 
-# The standard NtK/PoFA-compliance question block (received_ntk, ntk_date,
-# ntk_has_parking_period), shared with every defence-generator page that
-# needs it. This page adds a no-stopping-specific addendum to the parking
-# period question's help text.
+# The standard NtK/PoFA-compliance question block, shared with every
+# defence-generator page that needs it. This page gates the compliance
+# questions behind "did you receive an NtK?", since it also supports
+# keeper-defendants who have not received one.
 ntk = NtkPofaComplianceQuestions()
 
 incident_date = DateInput(question=SingleQuestion(display_question="Date of the incident:"))
@@ -138,7 +138,27 @@ form = Form(
         # Notice to Keeper (keeper only)
         Div(
             show_when=defend_as.when("keeper"),
-            elements=ntk.elements(),
+            elements=[
+                FormGroup(elements=[ntk.received_ntk]),
+                FormGroup2(
+                    show_when=ntk.received_ntk.when("yes"),
+                    elements=[
+                        "The NtK must meet some strict requirements to allow "
+                        "liability to be transferred from the driver to the "
+                        "keeper. These questions will help establish whether it "
+                        "meets those requirements.",
+                        *ntk.elements(),
+                    ],
+                ),
+                FormGroup2(
+                    show_when=ntk.received_ntk.when("no"),
+                    elements=[
+                        "This form is currently set up for defendants who have "
+                        "received a Notice to Keeper (NtK). This form is "
+                        "currently not set up for Notice to Hirer (NtH)."
+                    ],
+                ),
+            ],
         ),
         # Submit
         Button(text="Generate Defence", onclick="generateDefence()", extra_css_classes=["btn-center"]),

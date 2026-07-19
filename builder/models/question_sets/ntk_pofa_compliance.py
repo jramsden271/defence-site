@@ -23,6 +23,17 @@ reference) are drafted from a general understanding of Schedule 4 paragraph
 9 and have not been checked against the exact statutory wording — review
 before relying on them (see the ``NOTE(legal-review)`` comment below).
 
+:meth:`elements` deliberately returns *only* the raw compliance-question
+controls (``ntk_date``, ``ntk_has_parking_period``,
+``ntk_complies_with_para_9_4``, ``ntk_states_land``) — not
+``received_ntk``, and no surrounding layout (intro copy, conditional
+gating, no-NtK fallback message). That's left to the calling page, since
+different pages want different framing around the same questions: e.g.
+``no_stopping_defence`` gates them behind "did you receive an NtK?" with
+its own intro/fallback copy, while a standalone "is your NtK compliant?"
+page can show them unconditionally, assuming the reader already has an
+NtK in hand.
+
 Usage from a page's ``build_page.py``::
 
     from builder.models.question_sets.ntk_pofa_compliance import (
@@ -37,7 +48,11 @@ Usage from a page's ``build_page.py``::
         id="profileForm",
         elements=[
             ...,
-            *ntk.elements(),
+            FormGroup(elements=[ntk.received_ntk]),
+            FormGroup2(
+                show_when=ntk.received_ntk.when("yes"),
+                elements=["...intro copy...", *ntk.elements()],
+            ),
             ...,
         ],
     )
@@ -49,8 +64,6 @@ dependencies off them or drop them into a custom layout instead of calling
 """
 
 from builder.models.basic.base_element import BaseElement
-from builder.models.div.form_group import FormGroup
-from builder.models.div.form_group_2 import FormGroup2
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
@@ -118,32 +131,14 @@ class NtkPofaComplianceQuestions:
 
 
     def elements(self) -> list[str | BaseElement]:
-        """The standard form-fragment layout for this question set: the
-        received_ntk question, then a conditional follow-up block (shown
-        only when the answer is "yes") with the NtK date and content-
-        requirement questions. Ready to splice into a page's
-        ``Form.elements``."""
+        """The raw NtK compliance-question controls (date, parking period,
+        paragraph 9(4) compliance, land), in the standard order. Does not
+        include ``received_ntk`` or any surrounding layout — the calling
+        page decides how (or whether) to gate/frame these, since that
+        differs by page (see module docstring)."""
         return [
-            FormGroup(elements=[self.received_ntk]),
-            FormGroup2(
-                show_when=self.received_ntk.when("yes"),
-                elements=[
-                    "The NtK must meet some strict requirements to allow "
-                    "liability to be transferred from the driver to the "
-                    "keeper. These questions will help establish whether it "
-                    "meets those requirements.",
-                    self.ntk_date,
-                    self.ntk_has_parking_period,
-                    self.ntk_complies_with_para_9_4,
-                    self.ntk_states_land,
-                ],
-            ),
-            FormGroup2(
-                show_when=self.received_ntk.when("no"),
-                elements=[
-                    "This form is currently set up for defendants who have "
-                    "received a Notice to Keeper (NtK). This form is "
-                    "currently not set up for Notice to Hirer (NtH)."
-                ],
-            ),
+            self.ntk_date,
+            self.ntk_has_parking_period,
+            self.ntk_complies_with_para_9_4,
+            self.ntk_states_land,
         ]
