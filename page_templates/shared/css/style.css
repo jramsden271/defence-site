@@ -153,6 +153,12 @@ summary:hover {
 .btn-secondary:hover {
     background-color: var(--color-secondary-hover);
 }
+.summary-subbox {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: var(--color-bg-output);
+    border-radius: 4px;
+}
 #output-box {
     margin-top: 30px;
     padding: 20px;

@@ -64,12 +64,13 @@ const FORM_FIELDS = [
     "name": "ntkHasParkingPeriod",
     "options": [
       "yes",
-      "no"
+      "no",
+      "notsure"
     ]
   },
   {
     "kind": "radio",
-    "name": "ntkStatesKeeperLiability",
+    "name": "ntkCompliesWithPara94",
     "options": [
       "yes",
       "no"
@@ -77,17 +78,11 @@ const FORM_FIELDS = [
   },
   {
     "kind": "radio",
-    "name": "ntkStatesSumPayable",
+    "name": "ntkStatesLand",
     "options": [
       "yes",
-      "no"
-    ]
-  },
-  {
-    "kind": "radio",
-    "name": "ntkRefersToTerms",
-    "options": [
-      "yes",
+      "vaguely",
+      "wrong",
       "no"
     ]
   }

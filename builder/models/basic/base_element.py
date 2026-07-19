@@ -141,6 +141,37 @@ def _to_camel_case(snake_case: str) -> str:
     return first + "".join(word.title() for word in rest)
 
 
+def _assign_name(value, var_name: str) -> None:
+    """Backfill ``value.name`` from ``var_name`` if ``value`` is an unnamed
+    :class:`Triggerable`; otherwise, if ``value`` is a plain object (e.g. a
+    question-set instance like
+    :class:`~builder.models.question_sets.ntk_pofa_compliance.NtkPofaComplianceQuestions`),
+    recurse into its attributes so controls it owns get named too.
+
+    Recursion is deliberately limited to plain objects (``vars(value)``
+    succeeds) rather than every attribute of every :class:`BaseElement` —
+    a :class:`BaseElement`'s own children are pydantic fields (e.g.
+    ``elements``), not the kind of "container class holding named controls"
+    this function backfills, and are already reachable independently
+    wherever they're built.
+    """
+    if isinstance(value, Triggerable):
+        if not value.name:
+            value.name = _to_camel_case(var_name)
+        return
+
+    if isinstance(value, BaseElement) or isinstance(value, (str, int, float, bool, type(None))):
+        return
+
+    try:
+        attrs = vars(value)
+    except TypeError:
+        return
+
+    for attr_name, attr_value in attrs.items():
+        _assign_name(attr_value, attr_name)
+
+
 def assign_names_from_globals(namespace: dict) -> None:
     """Backfill unset ``Triggerable.name`` fields from their variable name.
 
@@ -151,10 +182,16 @@ def assign_names_from_globals(namespace: dict) -> None:
     matching the ``name``/``data-trigger`` convention used elsewhere (HTML
     attributes, JS), so questions can be written as
     ``pronouns = RadioGroup(label="...")`` instead of repeating the name.
+
+    Also recurses into plain-object globals (e.g. a question-set instance
+    such as ``NtkPofaComplianceQuestions``), naming any unnamed
+    ``Triggerable`` attribute from *its* attribute name (e.g.
+    ``ntk.ntk_states_land`` -> ``ntkStatesLand``) — so a question added
+    inside a question-set class gets a name automatically too, without
+    needing an explicit ``name=`` at construction.
     """
     for var_name, value in namespace.items():
-        if isinstance(value, Triggerable) and not value.name:
-            value.name = _to_camel_case(var_name)
+        _assign_name(value, var_name)
 
 
 def render_help(help: "HelpText | None") -> str:

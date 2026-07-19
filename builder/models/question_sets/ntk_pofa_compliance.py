@@ -84,46 +84,38 @@ class NtkPofaComplianceQuestions:
             display_question="Does the NtK show a parking period?"
         )
         ntk_has_parking_period_q.add_yes_no_options()
+        ntk_has_parking_period_q.add_option("Not sure","notsure")
         ntk_has_parking_period_q.options[0].description = "May include \"parking period\", \"period of parking\", \"start and end time\", or \"duration of parking\""
-        ntk_has_parking_period_q.set_help("PoFA does not provide much guidance on what constitutes a parking period, so this is a bit of a grey zone.\n\nIf the NtK shows some kind of a start or an end time, or a parking duration, then this is likely valid, so choose 'yes'.\n\nIf the NtK shows a single time, or a single time with the phrase like 'the period immediately preceding', then this can be contested, so choose 'no'.")
+        ntk_has_parking_period_q.set_help("PoFA was seemingly written to handle parking overstays, yet is often deployed by parking operators for other misdemeanours, such as parking out of hours, stopping in a no-stopping zone, or parking out of bay. For these more exotic cases, PoFA does not provide much guidance on what constitutes a parking period, so this is a bit of a grey zone.\n\nIf the NtK shows some kind of a start and an end time, or a parking duration, then this is likely valid, so choose 'yes'.\n\nIf the NtK shows a single time, or a single time with the phrase like 'the period immediately preceding [time]', then this can be contested, so choose 'no'.\n\nIf it is not even alleged that you parked, (e.g. if the allegation concerns a no-stopping zone) then this is likely a 'no'.\n\nIf you choose 'no', you may need to manually edit the defence to tailor it to your situation and the NtK's exact wording regarding times.\n\nSelect 'not sure' to skip this one.")
         self.ntk_has_parking_period = RadioGroup(
             name="ntkHasParkingPeriod", question=ntk_has_parking_period_q
         )
 
-        # NOTE(legal-review): the remaining Schedule 4 paragraph 9 content
-        # requirements below (keeper-liability warning, sum payable/discount
-        # terms, terms-and-conditions/signage reference) are drafted from a
-        # general understanding of PoFA 2012 and have NOT been checked
-        # against the exact statutory wording. Verify each before relying
-        # on it. These are the more commonly-seen NtK defects in practice —
-        # not an exhaustive list of every paragraph 9 requirement.
+        ntk_complies_with_para_9_4_q = MultipleChoiceQuestion(
+            display_question="Does the NtK comply with PoFA Sch.4 paragraph 9(4) regarding keeper liability when the driver details are not known?"
+        )
+        ntk_complies_with_para_9_4_q.add_yes_no_options()
+        ntk_complies_with_para_9_4_q.set_help("""<p>For liability to transfer from driver to keeper, the NtK must invite the keeper to either pay the charge or identify the driver, and warn that if neither happens, the keeper will be held liable for the charge as if they were the driver.</p><p>There is some very exact wording within PoFA Sch.4 para 9 (4). The NtK should contain the following text, either word for word exact, or <em>very</em> close to it:</p><div class=\"summary-subbox\"><p>
+        warn the keeper that if, after the period of 28 days beginning with the day after that on which the notice is given—</p><p>
 
-        ntk_states_keeper_liability_q = MultipleChoiceQuestion(
-            display_question="Does the NtK state that the keeper is liable if the driver's details aren't known?"
-        )
-        ntk_states_keeper_liability_q.add_yes_no_options()
-        ntk_states_keeper_liability_q.set_help("For liability to transfer from driver to keeper, the NtK must invite the keeper to either pay the charge or identify the driver, and warn that if neither happens, the keeper will be held liable for the charge as if they were the driver.")
-        self.ntk_states_keeper_liability = RadioGroup(
-            name="ntkStatesKeeperLiability", question=ntk_states_keeper_liability_q
-        )
+        \t(i)the amount of the unpaid parking charges specified under paragraph (d) has not been paid in full, and</p><p>
 
-        ntk_states_sum_payable_q = MultipleChoiceQuestion(
-            display_question="Does the NtK specify the total sum payable, including any discount or increase terms?"
-        )
-        ntk_states_sum_payable_q.add_yes_no_options()
-        ntk_states_sum_payable_q.set_help("A valid NtK must specify the amount of the unpaid parking charge as at the date of the notice, and set out how that sum may be reduced (e.g. an early-payment discount) or increased (e.g. after a further period of non-payment).")
-        self.ntk_states_sum_payable = RadioGroup(
-            name="ntkStatesSumPayable", question=ntk_states_sum_payable_q
-        )
+        \t(ii)the creditor does not know both the name of the driver and a current address for service for the driver,</p><p>
 
-        ntk_refers_to_terms_q = MultipleChoiceQuestion(
-            display_question="Does the NtK refer to the terms and conditions displayed on site (e.g. on signage), and say where they can be inspected?"
+        the creditor will (if all the applicable conditions under this Schedule are met) have the right to recover from the keeper so much of that amount as remains unpaid</p></div>
+                                               """)
+        self.ntk_complies_with_para_9_4 = RadioGroup(question=ntk_complies_with_para_9_4_q)
+
+        ntk_states_land_q = MultipleChoiceQuestion(
+            display_question="Does the NtK specify the land on which it was parked?"
         )
-        ntk_refers_to_terms_q.add_yes_no_options()
-        ntk_refers_to_terms_q.set_help("A valid NtK must refer to the presence and location of the parking terms and conditions (e.g. signage on site) that the driver is alleged to have breached, and explain how a copy of those terms may be obtained or inspected.")
-        self.ntk_refers_to_terms = RadioGroup(
-            name="ntkRefersToTerms", question=ntk_refers_to_terms_q
-        )
+        ntk_states_land_q.add_option("Yes")
+        ntk_states_land_q.add_option("Yes - vaguely","vaguely","e.g. 'Birmingham City Centre' as a parking location is too vague. The location should generally identify a particular car park or street.")
+        ntk_states_land_q.add_option("Yes - but it's wrong","wrong","Check the location in the NtK carefully. Sometimes a neighbouring car park will be given instead of the correct location.")
+        ntk_states_land_q.add_option("No","no","No location is specified at all.")
+
+        self.ntk_states_land = RadioGroup(question=ntk_states_land_q)
+
 
     def elements(self) -> list[str | BaseElement]:
         """The standard form-fragment layout for this question set: the
@@ -142,9 +134,8 @@ class NtkPofaComplianceQuestions:
                     "meets those requirements.",
                     self.ntk_date,
                     self.ntk_has_parking_period,
-                    self.ntk_states_keeper_liability,
-                    self.ntk_states_sum_payable,
-                    self.ntk_refers_to_terms,
+                    self.ntk_complies_with_para_9_4,
+                    self.ntk_states_land,
                 ],
             ),
             FormGroup2(
