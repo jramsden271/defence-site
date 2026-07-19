@@ -22,7 +22,6 @@ sys.path.insert(0, str(repo_root))
 
 from pages.shared.css.build_css import write_shared_css  # noqa: E402
 from pages.shared.js.build_js import write_shared_js  # noqa: E402
-from pages.shared.pofa_date.build_pofa_date import write_pofa_date_js  # noqa: E402
 from pages.shared.resources.build_resources import write_shared_resources  # noqa: E402
 from pages.shared.theme.build_theme import write_theme_js  # noqa: E402
 
@@ -34,7 +33,6 @@ write_shared_css(dist_dir)
 write_shared_resources(dist_dir)
 write_theme_js(dist_dir)
 write_shared_js(dist_dir)
-write_pofa_date_js(dist_dir)
 
 PAGE_BUILDERS = [
     repo_root / "pages" / "index" / "build_page.py",
