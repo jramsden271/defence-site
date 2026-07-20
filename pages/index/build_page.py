@@ -5,23 +5,47 @@ Run via the repo-root entry point:
 
     python builder/build_everything.py
 
-Currently this page has no dynamic content: its body is a static fragment,
-read as-is from ``blocks/index.html`` and assembled into a full page via
-the shared layout renderer. As the homepage grows (e.g. a generated list
-of tool links), this can adopt the same Python-element-tree approach as
-``pages/no_stopping_defence``.
+Built from the Python element classes (same approach as
+``pages/no_stopping_defence``), rather than a hand-authored HTML
+fragment — see ``blocks/`` for the (now unused) legacy file this
+replaced.
 """
 
 from pathlib import Path
 
+from builder.models.basic.a import A
+from builder.models.basic.heading import H2
+from builder.models.basic.p import P
+from builder.models.div.button_column import ButtonColumn
 from page_templates.content.render_content import render_content
 
 page_dir = Path(__file__).parent
 repo_root = page_dir.parent.parent
 dist_dir = repo_root / "dist"
 
-with open(page_dir / "blocks" / "index.html", "r", encoding="utf-8") as f:
-    body_html = f.read()
+intro = [
+    H2(children=["Defence generators"]),
+    P(text=(
+        "This is a placeholder homepage — a proper landing page is "
+        "coming later. For now, pick a tool below."
+    )),
+    ButtonColumn(
+        children=[
+            A(
+                text="No stopping defence generator",
+                href="no_stopping_defence.html",
+                custom_attributes={"class": "btn btn-primary"},
+            ),
+            A(
+                text="Is your NtK valid?",
+                href="ntk_compliance_check.html",
+                custom_attributes={"class": "btn btn-primary"},
+            ),
+        ],
+    ),
+]
+
+body_html = "\n".join(element.to_html() for element in intro)
 
 html = render_content(title="Defence generators", body_html=body_html)
 
