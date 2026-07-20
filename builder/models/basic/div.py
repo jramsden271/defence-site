@@ -11,8 +11,8 @@ class Div(Conditional):
     container conditionally visible.
 
     Renders via the base :class:`~builder.models.basic.html_tag.HtmlTag`
-    render (``tag``/``base_attributes``/``elements``) — nothing to override
-    here. A plain ``str`` in ``elements`` is emitted verbatim, not
+    render (``tag``/``base_attributes``/``children``) — nothing to override
+    here. A plain ``str`` in ``children`` is emitted verbatim, not
     auto-wrapped in a paragraph; wrap it in a
     :class:`~models.basic.p.P` yourself if you want one.
     """

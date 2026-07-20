@@ -33,7 +33,7 @@ class HtmlTag(BaseModel):
     Renders as ``<{tag} {attributes}>{inner html}</{tag}>`` by default:
     ``tag`` and ``base_attributes`` are fixed per subclass (e.g. ``Div``
     sets ``tag = "div"``, ``base_attributes = {"class": "form-group"}``);
-    ``elements`` is this tag's inner HTML, rendered by concatenating each
+    ``children`` is this tag's inner HTML, rendered by concatenating each
     child — an :class:`HtmlTag` child contributes its own ``to_html()``,
     a plain ``str`` child is emitted verbatim (no automatic wrapping —
     wrap it in a :class:`~models.basic.p.P` yourself if you want a
@@ -41,6 +41,12 @@ class HtmlTag(BaseModel):
     some inner HTML" (e.g. :class:`~models.forms.radio.radio_item.RadioItem`,
     which renders sibling ``input``/``label``/hint elements) override
     :meth:`to_html` directly instead.
+
+    A subclass for a self-closing/void tag (``img``, ``input``, ``br``, ...)
+    sets ``is_self_closing = True`` instead: it renders as
+    ``<{tag} {attributes}>`` with no closing tag, and can't have
+    ``children`` (raises if any are set) — a self-closing tag has no
+    children by definition.
 
     It deliberately has no visibility or trigger behaviour of its own — those
     are opt-in via the :class:`Conditional` and :class:`Triggerable` mixins, so
@@ -60,6 +66,13 @@ class HtmlTag(BaseModel):
     # directly), since those never call the base render.
     tag: ClassVar[str] = ""
 
+    # Whether this kind of element is a self-closing/void tag (e.g. "img",
+    # "input", "br") — one with no closing tag and, correspondingly, no
+    # possible children. When True, to_html() renders `<{tag}{attrs}>`
+    # (HTML5 void-element style, no trailing slash) and raises if
+    # `children` is non-empty, since a self-closing tag can't have any.
+    is_self_closing: ClassVar[bool] = False
+
     # This kind of element's fixed HTML attributes (e.g.
     # {"class": "btn btn-primary"} for Button, {"class": "form-group-2"}
     # for FormGroup2). Also a ClassVar: it can't be passed to __init__, set
@@ -76,7 +89,7 @@ class HtmlTag(BaseModel):
     # This tag's inner HTML/children. A str child is emitted verbatim by
     # to_html() (not auto-wrapped in a paragraph); an HtmlTag child
     # contributes its own to_html().
-    elements: list["str | HtmlTag"] = []
+    children: list["str | HtmlTag"] = []
 
     def get_attribute(self, key: str, concatenate: Literal["yes", "no", "auto"] = "auto") -> str:
         """Resolve a single HTML attribute from ``base_attributes`` and
@@ -139,15 +152,17 @@ class HtmlTag(BaseModel):
         return "".join(f' {key}="{value}"' for key, value in attrs.items())
 
     def _inner_html(self) -> str:
-        """This tag's ``elements`` rendered and joined: an :class:`HtmlTag`
+        """This tag's ``children`` rendered and joined: an :class:`HtmlTag`
         child via its own ``to_html()``, a plain ``str`` child verbatim."""
         return "\n".join(
             child if isinstance(child, str) else child.to_html()
-            for child in self.elements
+            for child in self.children
         )
 
     def to_html(self) -> str:
-        """Render as ``<{tag} {attrs}>{inner}</{tag}>``.
+        """Render as ``<{tag} {attrs}>{inner}</{tag}>`` — or, if
+        ``is_self_closing`` is set, as the void-element form
+        ``<{tag} {attrs}>`` with no closing tag and no inner HTML.
 
         This default only applies to subclasses that set ``tag`` — anything
         needing a different shape (multiple sibling tags, no wrapping tag
@@ -158,6 +173,15 @@ class HtmlTag(BaseModel):
                 f"{type(self).__name__} has no `tag` set and does not "
                 "override to_html()."
             )
+
+        if self.is_self_closing:
+            if self.children:
+                raise ValueError(
+                    f"{type(self).__name__} is self-closing (<{self.tag}>) "
+                    "and cannot have `children`."
+                )
+            return f"<{self.tag}{self._attrs_html()}>"
+
         return f"<{self.tag}{self._attrs_html()}>{self._inner_html()}</{self.tag}>"
 
 
@@ -235,10 +259,10 @@ def _assign_name(value, var_name: str) -> None:
 
     Recursion is deliberately limited to plain objects (``vars(value)``
     succeeds) rather than every attribute of every :class:`HtmlTag` —
-    a :class:`HtmlTag`'s own children are pydantic fields (e.g.
-    ``elements``), not the kind of "container class holding named controls"
-    this function backfills, and are already reachable independently
-    wherever they're built.
+    a :class:`HtmlTag`'s own children are pydantic fields (``children``),
+    not the kind of "container class holding named controls" this
+    function backfills, and are already reachable independently wherever
+    they're built.
     """
     if isinstance(value, Triggerable):
         if not value.name:

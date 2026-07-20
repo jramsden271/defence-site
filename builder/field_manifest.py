@@ -22,7 +22,7 @@ from builder.models.forms.text_input import TextInput
 def collect_fields(root: HtmlTag) -> list[dict]:
     """Walk an element tree and return a manifest entry per value-bearing field.
 
-    Recurses into anything with an ``elements`` list (``Form``, ``Div`` and its
+    Recurses into anything with a ``children`` list (``Form``, ``Div`` and its
     subclasses). Each :class:`RadioGroup` contributes one ``radio`` entry
     (read via its ``name``, with its question's ``options`` — the possible
     ``value``s — listed alongside); each :class:`DateInput`/:class:`TextInput`/
@@ -47,7 +47,7 @@ def collect_fields(root: HtmlTag) -> list[dict]:
     elif isinstance(root, IntegerInput):
         fields.append({"kind": "integer", "id": root.name})
 
-    for child in getattr(root, "elements", []):
+    for child in getattr(root, "children", []):
         if isinstance(child, HtmlTag):
             fields.extend(collect_fields(child))
 

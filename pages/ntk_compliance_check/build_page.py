@@ -58,9 +58,9 @@ assign_names_from_globals(globals())
 
 form = Form(
     id="profileForm",
-    elements=[
-        FormGroup(elements=[incident_date]),
-        *[FormGroup(elements=[element]) for element in ntk.elements()],
+    children=[
+        FormGroup(children=[incident_date]),
+        *[FormGroup(children=[element]) for element in ntk.elements()],
         # Submit
         Button(text="Check Compliance", onclick="generateDefence()", extra_attributes={"class": "btn-center"}),
     ],

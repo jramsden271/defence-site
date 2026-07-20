@@ -114,36 +114,36 @@ assign_names_from_globals(globals())
 
 form = Form(
     id="profileForm",
-    elements=[
+    children=[
         # Standalone questions
-        FormGroup(elements=[pronouns]),
-        FormGroup(elements=[defend_as]),
+        FormGroup(children=[pronouns]),
+        FormGroup(children=[defend_as]),
         FormGroup2(
             show_when=defend_as.when("keeper"),
-            elements=[incident_land],
+            children=[incident_land],
         ),
         # Incident date
-        FormGroup(elements=[has_incident_date]),
+        FormGroup(children=[has_incident_date]),
         FormGroup2(
             show_when=has_incident_date.when("single"),
-            elements=[incident_date],
+            children=[incident_date],
         ),
         FormGroup2(
             show_when=has_incident_date.when("range"),
-            elements=[P(text=HELP["date_range_explanation"].body)],
+            children=[P(text=HELP["date_range_explanation"].body)],
         ),
         FormGroup2(
             show_when=has_incident_date.when("no"),
-            elements=[P(text="If no date is specified at all, consider using the Chan and Akande defence.")],
+            children=[P(text="If no date is specified at all, consider using the Chan and Akande defence.")],
         ),
         # Notice to Keeper (keeper only)
         Div(
             show_when=defend_as.when("keeper"),
-            elements=[
-                FormGroup(elements=[ntk.received_ntk]),
+            children=[
+                FormGroup(children=[ntk.received_ntk]),
                 FormGroup2(
                     show_when=ntk.received_ntk.when("yes"),
-                    elements=[
+                    children=[
                         P(text=(
                             "The NtK must meet some strict requirements to allow "
                             "liability to be transferred from the driver to the "
@@ -155,7 +155,7 @@ form = Form(
                 ),
                 FormGroup2(
                     show_when=ntk.received_ntk.when("no"),
-                    elements=[
+                    children=[
                         P(text=(
                             "This form is currently set up for defendants who have "
                             "received a Notice to Keeper (NtK). This form is "

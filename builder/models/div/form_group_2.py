@@ -9,7 +9,7 @@ class FormGroup2(Div):
     date input revealed after a question is answered).
 
     Same as :class:`~models.basic.div.Div` but with the class name fixed, so the
-    caller only supplies ``elements`` (and optionally ``depends_on``).
+    caller only supplies ``children`` (and optionally ``depends_on``).
     """
 
     base_attributes: ClassVar[dict[str, str]] = {"class": "form-group-2"}

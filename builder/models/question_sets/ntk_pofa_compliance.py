@@ -46,12 +46,12 @@ Usage from a page's ``build_page.py``::
 
     form = Form(
         id="profileForm",
-        elements=[
+        children=[
             ...,
-            FormGroup(elements=[ntk.received_ntk]),
+            FormGroup(children=[ntk.received_ntk]),
             FormGroup2(
                 show_when=ntk.received_ntk.when("yes"),
-                elements=[P(text="...intro copy..."), *ntk.elements()],
+                children=[P(text="...intro copy..."), *ntk.elements()],
             ),
             ...,
         ],
@@ -147,5 +147,5 @@ class NtkPofaComplianceQuestions:
             self.ntk_has_parking_period,
             self.ntk_complies_with_para_9_4,
             self.ntk_states_land,
-            FormGroup2(show_when=self.ntk_states_land.when("vaguely"),elements=[self.ntk_incident_address])
+            FormGroup2(show_when=self.ntk_states_land.when("vaguely"),children=[self.ntk_incident_address])
         ]
