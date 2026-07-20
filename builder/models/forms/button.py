@@ -2,10 +2,10 @@ from typing import ClassVar
 
 from pydantic import Field
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 
 
-class Button(BaseElement):
+class Button(HtmlTag):
     """A ``<button type="button">`` with a click handler."""
 
     base_css_classes: ClassVar[str] = "btn btn-primary"

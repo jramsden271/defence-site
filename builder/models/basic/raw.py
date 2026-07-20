@@ -1,9 +1,9 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 
 
-class Raw(BaseElement):
+class Raw(HtmlTag):
     """
     An escape hatch element that emits its ``html`` verbatim. Useful for small
     inline snippets that don't warrant a dedicated class.

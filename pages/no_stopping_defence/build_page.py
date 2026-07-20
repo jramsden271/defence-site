@@ -20,7 +20,7 @@ dependencies between questions are expressed with
 from pathlib import Path
 
 from builder.help_text import load_help_text
-from builder.models.basic.base_element import assign_names_from_globals
+from builder.models.basic.html_tag import assign_names_from_globals
 from builder.models.basic.div import Div
 from builder.models.div.form_group import FormGroup
 from builder.models.div.form_group_2 import FormGroup2

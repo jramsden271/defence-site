@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import Field, field_validator
 
-from builder.models.basic.base_element import BaseElement, Conditional, normalise_children
+from builder.models.basic.html_tag import HtmlTag, Conditional, normalise_children
 
 
 class Div(Conditional):
@@ -12,16 +12,16 @@ class Div(Conditional):
     Set ``depends_on`` (via a trigger's ``.when(value)``) to make the whole
     container conditionally visible.
 
-    Children may be given as :class:`BaseElement` instances or as plain strings;
+    Children may be given as :class:`HtmlTag` instances or as plain strings;
     strings are wrapped in a :class:`~models.basic.p.P` paragraph, so a simple
     text block reads as ``elements=["some text"]`` instead of
     ``elements=[P(text="some text")]``.
     """
 
     base_css_classes: ClassVar[str] = "form-group"
-    # Declared as ``str | BaseElement`` so callers can pass plain strings; the
-    # validator below normalises everything to BaseElement instances.
-    elements: list[str | BaseElement] = Field(
+    # Declared as ``str | HtmlTag`` so callers can pass plain strings; the
+    # validator below normalises everything to HtmlTag instances.
+    elements: list[str | HtmlTag] = Field(
         ..., description="Child elements (strings are treated as paragraphs)."
     )
 

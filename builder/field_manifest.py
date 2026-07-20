@@ -11,7 +11,7 @@ field shows up in ``form_variables.js`` the next time the builder runs.
 import json
 from pathlib import Path
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
 from builder.models.forms.integer_input import IntegerInput
@@ -19,7 +19,7 @@ from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.forms.text_input import TextInput
 
 
-def collect_fields(root: BaseElement) -> list[dict]:
+def collect_fields(root: HtmlTag) -> list[dict]:
     """Walk an element tree and return a manifest entry per value-bearing field.
 
     Recurses into anything with an ``elements`` list (``Form``, ``Div`` and its
@@ -48,7 +48,7 @@ def collect_fields(root: BaseElement) -> list[dict]:
         fields.append({"kind": "integer", "id": root.name})
 
     for child in getattr(root, "elements", []):
-        if isinstance(child, BaseElement):
+        if isinstance(child, HtmlTag):
             fields.extend(collect_fields(child))
 
     return fields

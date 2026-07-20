@@ -36,12 +36,12 @@ def normalise_children(value):
     # Imported lazily to avoid a circular import (P subclasses Conditional).
     from builder.models.basic.p import P
 
-    if isinstance(value, (str, BaseElement)):
+    if isinstance(value, (str, HtmlTag)):
         value = [value]
     return [P(text=item) if isinstance(item, str) else item for item in value]
 
 
-class BaseElement(BaseModel):
+class HtmlTag(BaseModel):
     """
     Base class for all elements in the model.
 
@@ -85,7 +85,7 @@ class BaseElement(BaseModel):
         raise NotImplementedError("Subclasses must implement this method.")
 
 
-class Conditional(BaseElement):
+class Conditional(HtmlTag):
     """
     Mixin for elements that can be conditionally shown/hidden.
 
@@ -108,7 +108,7 @@ class Conditional(BaseElement):
         return f'{self.show_when.attrs()} style="display:none;"'
 
 
-class Triggerable(BaseElement):
+class Triggerable(HtmlTag):
     """
     Mixin for elements whose current answer can control the visibility of
     other elements (e.g. radio groups).
@@ -149,8 +149,8 @@ def _assign_name(value, var_name: str) -> None:
     recurse into its attributes so controls it owns get named too.
 
     Recursion is deliberately limited to plain objects (``vars(value)``
-    succeeds) rather than every attribute of every :class:`BaseElement` —
-    a :class:`BaseElement`'s own children are pydantic fields (e.g.
+    succeeds) rather than every attribute of every :class:`HtmlTag` —
+    a :class:`HtmlTag`'s own children are pydantic fields (e.g.
     ``elements``), not the kind of "container class holding named controls"
     this function backfills, and are already reachable independently
     wherever they're built.
@@ -160,7 +160,7 @@ def _assign_name(value, var_name: str) -> None:
             value.name = _to_camel_case(var_name)
         return
 
-    if isinstance(value, BaseElement) or isinstance(value, (str, int, float, bool, type(None))):
+    if isinstance(value, HtmlTag) or isinstance(value, (str, int, float, bool, type(None))):
         return
 
     try:

@@ -1,9 +1,9 @@
 from pydantic import Field, field_validator
 
-from builder.models.basic.base_element import BaseElement, normalise_children
+from builder.models.basic.html_tag import HtmlTag, normalise_children
 
 
-class Form(BaseElement):
+class Form(HtmlTag):
     """
     A ``<form>`` container holding the questions and controls.
 
@@ -12,7 +12,7 @@ class Form(BaseElement):
     """
 
     id: str = Field(default="profileForm", description="The form's id.")
-    elements: list[str | BaseElement] = Field(
+    elements: list[str | HtmlTag] = Field(
         default_factory=list, description="Top-level form children."
     )
 

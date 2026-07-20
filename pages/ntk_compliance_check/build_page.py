@@ -18,7 +18,7 @@ and generates paragraphs explaining any compliance defects found.
 
 from pathlib import Path
 
-from builder.models.basic.base_element import assign_names_from_globals
+from builder.models.basic.html_tag import assign_names_from_globals
 from builder.models.div.form_group import FormGroup
 from builder.models.forms.button import Button
 from builder.models.forms.date_input import DateInput

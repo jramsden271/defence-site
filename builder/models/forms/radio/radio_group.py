@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import Field
 
-from builder.models.basic.base_element import Triggerable, render_help
+from builder.models.basic.html_tag import Triggerable, render_help
 from builder.models.forms.radio.radio_item import RadioItem
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 

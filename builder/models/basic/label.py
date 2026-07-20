@@ -1,9 +1,9 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 
 
-class Label(BaseElement):
+class Label(HtmlTag):
     """
     Represents a label element in the model.
     """

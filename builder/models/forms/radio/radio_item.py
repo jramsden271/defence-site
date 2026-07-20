@@ -1,9 +1,9 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 
 
-class RadioItem(BaseElement):
+class RadioItem(HtmlTag):
     """
     Represents a single radio button option.
 

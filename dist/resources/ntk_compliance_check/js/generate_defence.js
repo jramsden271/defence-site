@@ -33,14 +33,16 @@ function generateDefence() {
     if (formValues.ntkStatesLand === "vaguely") {
         const incidentAddressVal = formValues.ntkIncidentAddress;
         const locationDescription = incidentAddressVal
-            ? ` (the NtK gives the location only as "${incidentAddressVal}")`
+            ? `The NtK gives the location only as '${incidentAddressVal}', making it impossible to ascertain the exact location of the vehicle and the contract the vehicle allegedly contravened. `
             : "";
-        paragraphs.push(`The Notice to Keeper attempts to specify the land on which the vehicle was parked, but does so too vaguely${locationDescription}. A valid NtK must clearly and accurately identify the relevant land, so this is a defect that may prevent liability transferring from the driver to the keeper.`);
+        paragraphs.push(`The Notice to Keeper attempts to specify the land on which the vehicle was parked, but does so too vaguely. ${locationDescription}A valid NtK must clearly and accurately identify the relevant land, so this is a defect that may prevent liability transferring from the driver to the keeper.`);
     }
 
+    /*
     if (paragraphs.length === 0) {
         paragraphs.push(`Based on the answers given, no defects were identified with this Notice to Keeper under the requirements checked by this tool. This is not a guarantee that the NtK is fully compliant with PoFA 2012 — always review the NtK carefully and seek advice specific to your situation.`);
     }
+        */
 
     renderDefenceOutput(paragraphs, pofaResult);
 }

@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import Conditional
+from builder.models.basic.html_tag import Conditional
 
 
 class Heading(Conditional):

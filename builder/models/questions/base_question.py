@@ -17,7 +17,7 @@ class BaseQuestion(BaseModel):
 
     Help text is recorded as a :class:`HelpText`; it's up to the control
     rendering the question to turn that into whatever widget it uses (e.g. an
-    ``ExpandingTextbox``) — see :func:`~models.basic.base_element.render_help`.
+    ``ExpandingTextbox``) — see :func:`~models.basic.html_tag.render_help`.
     """
 
     model_config = ConfigDict(extra="forbid")

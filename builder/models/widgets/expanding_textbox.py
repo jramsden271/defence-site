@@ -1,10 +1,10 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 from builder.models.basic.p import P
 
 
-class ExpandingTextbox(BaseElement):
+class ExpandingTextbox(HtmlTag):
     """
     A collapsible ``<details>`` help block: a clickable ``summary`` that reveals
     the help text.

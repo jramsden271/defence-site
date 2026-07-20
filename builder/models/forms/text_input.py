@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from builder.models.basic.base_element import Triggerable, render_help
+from builder.models.basic.html_tag import Triggerable, render_help
 from builder.models.questions.single_question import SingleQuestion
 
 

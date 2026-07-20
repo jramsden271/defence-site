@@ -63,7 +63,7 @@ dependencies off them or drop them into a custom layout instead of calling
 :meth:`elements`.
 """
 
-from builder.models.basic.base_element import BaseElement
+from builder.models.basic.html_tag import HtmlTag
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.radio.radio_group import RadioGroup
 from builder.models.forms.text_input import TextInput
@@ -136,7 +136,7 @@ class NtkPofaComplianceQuestions:
 
 
 
-    def elements(self) -> list[str | BaseElement]:
+    def elements(self) -> list[str | HtmlTag]:
         """The raw NtK compliance-question controls (date, parking period,
         paragraph 9(4) compliance, land), in the standard order. Does not
         include ``received_ntk`` or any surrounding layout — the calling
