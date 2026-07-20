@@ -84,16 +84,16 @@ class HtmlTag(BaseModel):
     # Additional attributes a caller can supply per-instance, alongside
     # base_attributes. See :meth:`get_attribute`/:meth:`get_attributes` for
     # how a key set in both is resolved.
-    extra_attributes: dict[str, str] = {}
+    custom_attributes: dict[str, str] = {}
 
     # This tag's inner HTML/children. A str child is emitted verbatim by
     # to_html() (not auto-wrapped in a paragraph); an HtmlTag child
     # contributes its own to_html().
     children: list["str | HtmlTag"] = []
 
-    def get_attribute(self, key: str, concatenate: Literal["yes", "no", "auto"] = "auto") -> str:
+    def get_attribute(self, key: str, concatenate: Literal["yes", "override", "auto"] = "auto") -> str:
         """Resolve a single HTML attribute from ``base_attributes`` and
-        ``extra_attributes``.
+        ``custom_attributes``.
 
         If only one of the two dicts has ``key``, its value is returned. If
         neither has it, returns ``""`` — callers can rely on plain
@@ -104,8 +104,8 @@ class HtmlTag(BaseModel):
         combine:
 
         - ``"yes"``: space-join ``base_attributes[key]`` and
-          ``extra_attributes[key]`` (e.g. two ``class`` values).
-        - ``"no"``: ``extra_attributes[key]`` overrides
+          ``custom_attributes[key]`` (e.g. two ``class`` values).
+        - ``"override"``: ``custom_attributes[key]`` overrides
           ``base_attributes[key]``.
         - ``"auto"`` (default): concatenate for ``class`` (matching how
           CSS classes are meant to add up, not replace one another),
@@ -114,32 +114,32 @@ class HtmlTag(BaseModel):
           blindly concatenating them would produce invalid HTML/JS).
         """
         base_value = self.base_attributes.get(key)
-        extra_value = self.extra_attributes.get(key)
+        custom_value = self.custom_attributes.get(key)
 
         if base_value is None:
-            return extra_value or ""
-        if extra_value is None:
+            return custom_value or ""
+        if custom_value is None:
             return base_value
 
         should_concatenate = concatenate == "yes" or (concatenate == "auto" and key == "class")
         if should_concatenate:
-            return f"{base_value} {extra_value}"
-        return extra_value
+            return f"{base_value} {custom_value}"
+        return custom_value
 
-    def get_attributes(self, concatenate: Literal["yes", "no", "auto"] = "auto") -> dict[str, str]:
+    def get_attributes(self, concatenate: Literal["yes", "override", "auto"] = "auto") -> dict[str, str]:
         """Resolve every HTML attribute set in ``base_attributes`` and/or
-        ``extra_attributes`` into a single merged dict, applying
+        ``custom_attributes`` into a single merged dict, applying
         :meth:`get_attribute`'s ``concatenate`` rule to each key.
 
         Keys are ordered ``base_attributes`` first (in their declared
-        order), then any ``extra_attributes`` keys not already covered —
+        order), then any ``custom_attributes`` keys not already covered —
         a plain ``set`` union of both dicts' keys would iterate in an
         unspecified order, making rendered HTML non-reproducible between
         runs even though attribute order has no effect on how a browser
         interprets the tag.
         """
         keys = list(self.base_attributes.keys())
-        keys += [key for key in self.extra_attributes.keys() if key not in self.base_attributes]
+        keys += [key for key in self.custom_attributes.keys() if key not in self.base_attributes]
         return {key: self.get_attribute(key, concatenate=concatenate) for key in keys}
 
     def _attrs_html(self) -> str:
