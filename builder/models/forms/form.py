@@ -1,6 +1,8 @@
-from pydantic import Field, field_validator
+from typing import ClassVar
 
-from builder.models.basic.html_tag import HtmlTag, normalise_children
+from pydantic import Field
+
+from builder.models.basic.html_tag import HtmlTag
 
 
 class Form(HtmlTag):
@@ -11,13 +13,10 @@ class Form(HtmlTag):
     id, so this must match — currently ``profileForm``.
     """
 
+    tag: ClassVar[str] = "form"
+
     id: str = Field(default="profileForm", description="The form's id.")
-    elements: list[str | HtmlTag] = Field(
-        default_factory=list, description="Top-level form children."
-    )
 
-    _wrap_strings = field_validator("elements", mode="before")(normalise_children)
-
-    def to_html(self) -> str:
-        inner = "\n\n".join(child.to_html() for child in self.elements)
-        return f'<form id="{self.id}">\n\n{inner}\n\n</form>'
+    def _attrs_html(self) -> str:
+        """As :meth:`HtmlTag._attrs_html`, plus this form's ``id``."""
+        return f'{super()._attrs_html()} id="{self.id}"'

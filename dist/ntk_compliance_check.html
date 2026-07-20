@@ -51,20 +51,11 @@
         Note: The generated text is for informational purposes only and should not be considered legal advice. Always consult with a qualified legal professional for advice specific to your situation.
     </p>
 
-<form id="profileForm">
-
-<div class="form-group">
-<label for="incidentDate">Date of the incident:</label>
-<input type="date" id="incidentDate">
-</div>
-
-<div class="form-group">
-<label for="ntkDate">Issue date of the Notice to Keeper (NtK):</label>
-<input type="date" id="ntkDate">
-</div>
-
-<div class="form-group">
-<label for="ntkHasParkingPeriod">Does the NtK show a parking period?</label>
+<form id="profileForm"><div class="form-group"><label for="incidentDate">Date of the incident:</label>
+<input type="date" id="incidentDate"></div>
+<div class="form-group"><label for="ntkDate">Issue date of the Notice to Keeper (NtK):</label>
+<input type="date" id="ntkDate"></div>
+<div class="form-group"><label for="ntkHasParkingPeriod">Does the NtK show a parking period?</label>
 <div class="radio-group govuk-radio-group" data-trigger="ntkHasParkingPeriodTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="ntkHasParkingPeriod_yes" name="ntkHasParkingPeriod" value="yes">
@@ -89,11 +80,8 @@
 <p>If you choose 'no', you may need to manually edit the defence to tailor it to your situation and the NtK's exact wording regarding times.</p>
 <p>Select 'not sure' to skip this one.</p>
 </div>
-</details>
-</div>
-
-<div class="form-group">
-<label for="ntkCompliesWithPara94">Does the NtK comply with PoFA Sch.4 paragraph 9(4) regarding keeper liability when the driver details are not known?</label>
+</details></div>
+<div class="form-group"><label for="ntkCompliesWithPara94">Does the NtK comply with PoFA Sch.4 paragraph 9(4) regarding keeper liability when the driver details are not known?</label>
 <div class="radio-group govuk-radio-group" data-trigger="ntkCompliesWithPara94Trigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="ntkCompliesWithPara94_yes" name="ntkCompliesWithPara94" value="yes">
@@ -114,11 +102,8 @@
 <p>        the creditor will (if all the applicable conditions under this Schedule are met) have the right to recover from the keeper so much of that amount as remains unpaid</p></div>
                                                </p>
 </div>
-</details>
-</div>
-
-<div class="form-group">
-<label for="ntkStatesLand">Does the NtK specify the land on which it was parked?</label>
+</details></div>
+<div class="form-group"><label for="ntkStatesLand">Does the NtK specify the land on which it was parked?</label>
 <div class="radio-group govuk-radio-group" data-trigger="ntkStatesLandTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="ntkStatesLand_yes" name="ntkStatesLand" value="yes">
@@ -136,19 +121,10 @@
 <input class="govuk-radio-input" type="radio" id="ntkStatesLand_no" name="ntkStatesLand" value="no">
 <label class="govuk-radio-label" style="display:inline;" for="ntkStatesLand_no">No</label>
 <div class="govuk-hint">No location is specified at all.</div></div>
-</div>
-</div>
-
-<div class="form-group">
-<div class="form-group-2" data-depends-on="ntkStatesLandTrigger" data-value="vaguely" style="display:none;">
-<label for="ntkIncidentAddress">What location was specified on the NtK?</label>
-<input type="text" id="ntkIncidentAddress">
-</div>
-</div>
-
-<button type="button" class="btn btn-primary btn-center" onclick="generateDefence()">Check Compliance</button>
-
-</form>
+</div></div>
+<div class="form-group"><div class="form-group-2" data-depends-on="ntkStatesLandTrigger" data-value="vaguely" style="display:none;"><label for="ntkIncidentAddress">What location was specified on the NtK?</label>
+<input type="text" id="ntkIncidentAddress"></div></div>
+<button class="btn btn-primary btn-center" type="button" onclick="generateDefence()">Check Compliance</button></form>
     <!-- Output Area -->
     <div id="output-box">
         <h3>PoFA results:</h3>

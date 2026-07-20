@@ -22,6 +22,7 @@ from pathlib import Path
 from builder.help_text import load_help_text
 from builder.models.basic.html_tag import assign_names_from_globals
 from builder.models.basic.div import Div
+from builder.models.basic.p import P
 from builder.models.div.form_group import FormGroup
 from builder.models.div.form_group_2 import FormGroup2
 from builder.models.forms.button import Button
@@ -129,11 +130,11 @@ form = Form(
         ),
         FormGroup2(
             show_when=has_incident_date.when("range"),
-            elements=[HELP["date_range_explanation"].body],
+            elements=[P(text=HELP["date_range_explanation"].body)],
         ),
         FormGroup2(
             show_when=has_incident_date.when("no"),
-            elements=["If no date is specified at all, consider using the Chan and Akande defence."],
+            elements=[P(text="If no date is specified at all, consider using the Chan and Akande defence.")],
         ),
         # Notice to Keeper (keeper only)
         Div(
@@ -143,19 +144,23 @@ form = Form(
                 FormGroup2(
                     show_when=ntk.received_ntk.when("yes"),
                     elements=[
-                        "The NtK must meet some strict requirements to allow "
-                        "liability to be transferred from the driver to the "
-                        "keeper. These questions will help establish whether it "
-                        "meets those requirements.",
+                        P(text=(
+                            "The NtK must meet some strict requirements to allow "
+                            "liability to be transferred from the driver to the "
+                            "keeper. These questions will help establish whether it "
+                            "meets those requirements."
+                        )),
                         *ntk.elements(),
                     ],
                 ),
                 FormGroup2(
                     show_when=ntk.received_ntk.when("no"),
                     elements=[
-                        "This form is currently set up for defendants who have "
-                        "received a Notice to Keeper (NtK). This form is "
-                        "currently not set up for Notice to Hirer (NtH)."
+                        P(text=(
+                            "This form is currently set up for defendants who have "
+                            "received a Notice to Keeper (NtK). This form is "
+                            "currently not set up for Notice to Hirer (NtH)."
+                        )),
                     ],
                 ),
             ],

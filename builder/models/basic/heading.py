@@ -1,13 +1,39 @@
-from pydantic import Field
+from typing import ClassVar
 
 from builder.models.basic.html_tag import Conditional
 
 
-class Heading(Conditional):
-    """A heading element (``<h1>``..``<h6>``)."""
+class H1(Conditional):
+    """A ``<h1>`` heading. ``elements`` is the heading's content."""
 
-    text: str = Field(..., description="The heading text.")
-    level: int = Field(default=2, ge=1, le=6, description="Heading level 1-6.")
+    tag: ClassVar[str] = "h1"
 
-    def to_html(self) -> str:
-        return f"<h{self.level}{self._visibility_attrs()}>{self.text}</h{self.level}>"
+
+class H2(Conditional):
+    """A ``<h2>`` heading. ``elements`` is the heading's content."""
+
+    tag: ClassVar[str] = "h2"
+
+
+class H3(Conditional):
+    """A ``<h3>`` heading. ``elements`` is the heading's content."""
+
+    tag: ClassVar[str] = "h3"
+
+
+class H4(Conditional):
+    """A ``<h4>`` heading. ``elements`` is the heading's content."""
+
+    tag: ClassVar[str] = "h4"
+
+
+class H5(Conditional):
+    """A ``<h5>`` heading. ``elements`` is the heading's content."""
+
+    tag: ClassVar[str] = "h5"
+
+
+class H6(Conditional):
+    """A ``<h6>`` heading. ``elements`` is the heading's content."""
+
+    tag: ClassVar[str] = "h6"

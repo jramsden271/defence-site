@@ -1,8 +1,6 @@
 from typing import ClassVar
 
-from pydantic import Field, field_validator
-
-from builder.models.basic.html_tag import HtmlTag, Conditional, normalise_children
+from builder.models.basic.html_tag import Conditional
 
 
 class Div(Conditional):
@@ -12,31 +10,12 @@ class Div(Conditional):
     Set ``depends_on`` (via a trigger's ``.when(value)``) to make the whole
     container conditionally visible.
 
-    Children may be given as :class:`HtmlTag` instances or as plain strings;
-    strings are wrapped in a :class:`~models.basic.p.P` paragraph, so a simple
-    text block reads as ``elements=["some text"]`` instead of
-    ``elements=[P(text="some text")]``.
+    Renders via the base :class:`~builder.models.basic.html_tag.HtmlTag`
+    render (``tag``/``base_attributes``/``elements``) — nothing to override
+    here. A plain ``str`` in ``elements`` is emitted verbatim, not
+    auto-wrapped in a paragraph; wrap it in a
+    :class:`~models.basic.p.P` yourself if you want one.
     """
 
+    tag: ClassVar[str] = "div"
     base_attributes: ClassVar[dict[str, str]] = {"class": "form-group"}
-    # Declared as ``str | HtmlTag`` so callers can pass plain strings; the
-    # validator below normalises everything to HtmlTag instances.
-    elements: list[str | HtmlTag] = Field(
-        ..., description="Child elements (strings are treated as paragraphs)."
-    )
-
-    _wrap_strings = field_validator("elements", mode="before")(normalise_children)
-
-    def to_html(self) -> str:
-        children = []
-        for child in self.elements:
-            if isinstance(child, str):
-                children.append(f'<p>{child}</p>')
-            else:
-                children.append(child.to_html())
-        inner_html = "\n".join(children)
-        return (
-            f'<div class="{self.get_attribute("class")}"{self._visibility_attrs()}>\n'
-            f"{inner_html}\n"
-            f"</div>"
-        )

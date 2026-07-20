@@ -26,24 +26,21 @@ class Dependency(BaseModel):
         return f' data-depends-on="{self.trigger}" data-value="{self.value}"'
 
 
-def normalise_children(value):
-    """Coerce a container's ``elements`` input into a list of elements.
-
-    Accepts a single item or a list, and wraps any plain string in a
-    :class:`~models.basic.p.P` paragraph so text blocks can be written as
-    ``elements=["some text"]``. Used as a ``mode="before"`` field validator.
-    """
-    # Imported lazily to avoid a circular import (P subclasses Conditional).
-    from builder.models.basic.p import P
-
-    if isinstance(value, (str, HtmlTag)):
-        value = [value]
-    return [P(text=item) if isinstance(item, str) else item for item in value]
-
-
 class HtmlTag(BaseModel):
     """
     Base class for all elements in the model.
+
+    Renders as ``<{tag} {attributes}>{inner html}</{tag}>`` by default:
+    ``tag`` and ``base_attributes`` are fixed per subclass (e.g. ``Div``
+    sets ``tag = "div"``, ``base_attributes = {"class": "form-group"}``);
+    ``elements`` is this tag's inner HTML, rendered by concatenating each
+    child — an :class:`HtmlTag` child contributes its own ``to_html()``,
+    a plain ``str`` child is emitted verbatim (no automatic wrapping —
+    wrap it in a :class:`~models.basic.p.P` yourself if you want a
+    paragraph). Subclasses whose HTML doesn't fit "one wrapping tag around
+    some inner HTML" (e.g. :class:`~models.forms.radio.radio_item.RadioItem`,
+    which renders sibling ``input``/``label``/hint elements) override
+    :meth:`to_html` directly instead.
 
     It deliberately has no visibility or trigger behaviour of its own — those
     are opt-in via the :class:`Conditional` and :class:`Triggerable` mixins, so
@@ -56,18 +53,30 @@ class HtmlTag(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    # This kind of element's wrapping tag name (e.g. "div", "form", "h2").
+    # A ClassVar, not a pydantic field, so it's a true class-level constant
+    # — only overridden by subclassing. Left as "" for elements with no
+    # single wrapping tag (e.g. Raw, or anything overriding to_html()
+    # directly), since those never call the base render.
+    tag: ClassVar[str] = ""
+
     # This kind of element's fixed HTML attributes (e.g.
     # {"class": "btn btn-primary"} for Button, {"class": "form-group-2"}
-    # for FormGroup2). It's a ClassVar, not a pydantic field, so it's a true
-    # class-level constant: it can't be passed to __init__, set per-instance,
-    # or appear in model_dump()/schema — only overridden by subclassing.
-    # Elements with no single top-level tag can leave this empty.
+    # for FormGroup2). Also a ClassVar: it can't be passed to __init__, set
+    # per-instance, or appear in model_dump()/schema — only overridden by
+    # subclassing. Elements with no single top-level tag can leave this
+    # empty.
     base_attributes: ClassVar[dict[str, str]] = {}
 
     # Additional attributes a caller can supply per-instance, alongside
     # base_attributes. See :meth:`get_attribute`/:meth:`get_attributes` for
     # how a key set in both is resolved.
     extra_attributes: dict[str, str] = {}
+
+    # This tag's inner HTML/children. A str child is emitted verbatim by
+    # to_html() (not auto-wrapped in a paragraph); an HtmlTag child
+    # contributes its own to_html().
+    elements: list["str | HtmlTag"] = []
 
     def get_attribute(self, key: str, concatenate: Literal["yes", "no", "auto"] = "auto") -> str:
         """Resolve a single HTML attribute from ``base_attributes`` and
@@ -107,15 +116,49 @@ class HtmlTag(BaseModel):
     def get_attributes(self, concatenate: Literal["yes", "no", "auto"] = "auto") -> dict[str, str]:
         """Resolve every HTML attribute set in ``base_attributes`` and/or
         ``extra_attributes`` into a single merged dict, applying
-        :meth:`get_attribute`'s ``concatenate`` rule to each key."""
-        keys = {*self.base_attributes.keys(), *self.extra_attributes.keys()}
+        :meth:`get_attribute`'s ``concatenate`` rule to each key.
+
+        Keys are ordered ``base_attributes`` first (in their declared
+        order), then any ``extra_attributes`` keys not already covered —
+        a plain ``set`` union of both dicts' keys would iterate in an
+        unspecified order, making rendered HTML non-reproducible between
+        runs even though attribute order has no effect on how a browser
+        interprets the tag.
+        """
+        keys = list(self.base_attributes.keys())
+        keys += [key for key in self.extra_attributes.keys() if key not in self.base_attributes]
         return {key: self.get_attribute(key, concatenate=concatenate) for key in keys}
 
+    def _attrs_html(self) -> str:
+        """This tag's resolved attributes as a leading-space-prefixed HTML
+        attribute string (e.g. ``' class="form-group" id="x"'``), or ``""``
+        if there are none."""
+        attrs = self.get_attributes()
+        if not attrs:
+            return ""
+        return "".join(f' {key}="{value}"' for key, value in attrs.items())
+
+    def _inner_html(self) -> str:
+        """This tag's ``elements`` rendered and joined: an :class:`HtmlTag`
+        child via its own ``to_html()``, a plain ``str`` child verbatim."""
+        return "\n".join(
+            child if isinstance(child, str) else child.to_html()
+            for child in self.elements
+        )
+
     def to_html(self) -> str:
+        """Render as ``<{tag} {attrs}>{inner}</{tag}>``.
+
+        This default only applies to subclasses that set ``tag`` — anything
+        needing a different shape (multiple sibling tags, no wrapping tag
+        at all, ...) overrides this method instead.
         """
-        Convert the element to its HTML representation.
-        """
-        raise NotImplementedError("Subclasses must implement this method.")
+        if not self.tag:
+            raise NotImplementedError(
+                f"{type(self).__name__} has no `tag` set and does not "
+                "override to_html()."
+            )
+        return f"<{self.tag}{self._attrs_html()}>{self._inner_html()}</{self.tag}>"
 
 
 class Conditional(HtmlTag):
@@ -139,6 +182,15 @@ class Conditional(HtmlTag):
         if self.show_when is None:
             return ""
         return f'{self.show_when.attrs()} style="display:none;"'
+
+    def _attrs_html(self) -> str:
+        """As :meth:`HtmlTag._attrs_html`, plus the ``data-depends-on``/
+        ``data-value``/inline-``style`` bits that make this element
+        conditionally shown, when ``show_when`` is set. Folding this in
+        here (rather than overriding ``to_html()``) means any
+        ``Conditional`` subclass gets visibility support for free through
+        the base class's normal render."""
+        return f"{super()._attrs_html()}{self._visibility_attrs()}"
 
 
 class Triggerable(HtmlTag):

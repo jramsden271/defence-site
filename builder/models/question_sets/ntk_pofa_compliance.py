@@ -51,7 +51,7 @@ Usage from a page's ``build_page.py``::
             FormGroup(elements=[ntk.received_ntk]),
             FormGroup2(
                 show_when=ntk.received_ntk.when("yes"),
-                elements=["...intro copy...", *ntk.elements()],
+                elements=[P(text="...intro copy..."), *ntk.elements()],
             ),
             ...,
         ],

@@ -51,10 +51,7 @@
         Note: The generated text is for informational purposes only and should not be considered legal advice. Always consult with a qualified legal professional for advice specific to your situation.
     </p>
 
-<form id="profileForm">
-
-<div class="form-group">
-<label for="pronouns">What are your pronouns?</label>
+<form id="profileForm"><div class="form-group"><label for="pronouns">What are your pronouns?</label>
 <div class="radio-group govuk-radio-group" data-trigger="pronounsTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="pronouns_neutral" name="pronouns" value="neutral">
@@ -74,11 +71,8 @@
 <div class="help-content">
 <p>This is only used to ensure that the generated text uses the correct pronouns when referring to you. If you prefer not to specify, select "They/Them".</p>
 </div>
-</details>
-</div>
-
-<div class="form-group">
-<label for="defendAs">Are you defending as the Registered Keeper only, or as the Driver too?</label>
+</details></div>
+<div class="form-group"><label for="defendAs">Are you defending as the Registered Keeper only, or as the Driver too?</label>
 <div class="radio-group govuk-radio-group" data-trigger="defendAsTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="defendAs_keeper" name="defendAs" value="keeper">
@@ -88,11 +82,8 @@
 <input class="govuk-radio-input" type="radio" id="defendAs_driver" name="defendAs" value="driver">
 <label class="govuk-radio-label" style="display:inline;" for="defendAs_driver">Registered Keeper and driver</label>
 <div class="govuk-hint">Select if you have previously admitted to being the driver, or you were the driver AND you have a strong reason for making this a part of your case (e.g. you have mitigating circumstances that require you to reveal that you were the driver).</div></div>
-</div>
-</div>
-
-<div class="form-group-2" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
-<label for="incidentLand">What land did the incident take place on?</label>
+</div></div>
+<div class="form-group-2" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;"><label for="incidentLand">What land did the incident take place on?</label>
 <div class="radio-group govuk-radio-group" data-trigger="incidentLandTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="incidentLand_railway" name="incidentLand" value="railway">
@@ -113,11 +104,8 @@
 <p>This is important because certain types of land are not considered 'relevant land' under the Protection of Freedoms Act 2012, in which case, it is generally not possible to transfer liability to the keeper. If the incident happened on non-relevant land, the defendant is at a great advantage!</p>
 <p>Airport land and railway land generally include access roads, car parks and facilities immediately serving those lands. The boundary is dictated by where byelaws are in place. The boundary can be surprisingly large, and at some airports includes nearby hotels and fast food restaurant car parks. If you are not sure whether the incident happened on relevant land, it can be helpful to find a map with the boundary where byelaws are in place, or ask a question in the relevant forum.</p>
 </div>
-</details>
-</div>
-
-<div class="form-group">
-<label for="hasIncidentDate">Do the Particulars of Claim show the date of when the incident(s) occurred?</label>
+</details></div>
+<div class="form-group"><label for="hasIncidentDate">Do the Particulars of Claim show the date of when the incident(s) occurred?</label>
 <div class="radio-group govuk-radio-group" data-trigger="hasIncidentDateTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="hasIncidentDate_single" name="hasIncidentDate" value="single">
@@ -131,25 +119,12 @@
 <input class="govuk-radio-input" type="radio" id="hasIncidentDate_no" name="hasIncidentDate" value="no">
 <label class="govuk-radio-label" style="display:inline;" for="hasIncidentDate_no">No</label>
 </div>
-</div>
-</div>
-
-<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="single" style="display:none;">
-<label for="incidentDate">Date of the incident:</label>
-<input type="date" id="incidentDate">
-</div>
-
-<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="range" style="display:none;">
-<p>A date range normally means that the Claimant has alleged multiple incidents within a specific time frame. This requires a slightly different approach, which this tool currently does not support. You can try selecting a single date and proceeding from there, or if the date range is vague enough, it may make more sense to use the Chan and Akande defence.</p>
-</div>
-
-<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="no" style="display:none;">
-<p>If no date is specified at all, consider using the Chan and Akande defence.</p>
-</div>
-
-<div class="form-group" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;">
-<div class="form-group">
-<label for="receivedNtk">Did you receive a Notice to Keeper (NtK)?</label>
+</div></div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="single" style="display:none;"><label for="incidentDate">Date of the incident:</label>
+<input type="date" id="incidentDate"></div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="range" style="display:none;"><p>A date range normally means that the Claimant has alleged multiple incidents within a specific time frame. This requires a slightly different approach, which this tool currently does not support. You can try selecting a single date and proceeding from there, or if the date range is vague enough, it may make more sense to use the Chan and Akande defence.</p></div>
+<div class="form-group-2" data-depends-on="hasIncidentDateTrigger" data-value="no" style="display:none;"><p>If no date is specified at all, consider using the Chan and Akande defence.</p></div>
+<div class="form-group" data-depends-on="defendAsTrigger" data-value="keeper" style="display:none;"><div class="form-group"><label for="receivedNtk">Did you receive a Notice to Keeper (NtK)?</label>
 <div class="radio-group govuk-radio-group" data-trigger="receivedNtkTrigger">
 <div class="govuk-radio-item">
 <input class="govuk-radio-input" type="radio" id="receivedNtk_yes" name="receivedNtk" value="yes">
@@ -159,10 +134,8 @@
 <input class="govuk-radio-input" type="radio" id="receivedNtk_no" name="receivedNtk" value="no">
 <label class="govuk-radio-label" style="display:inline;" for="receivedNtk_no">No</label>
 </div>
-</div>
-</div>
-<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="yes" style="display:none;">
-<p>The NtK must meet some strict requirements to allow liability to be transferred from the driver to the keeper. These questions will help establish whether it meets those requirements.</p>
+</div></div>
+<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="yes" style="display:none;"><p>The NtK must meet some strict requirements to allow liability to be transferred from the driver to the keeper. These questions will help establish whether it meets those requirements.</p>
 <label for="ntkDate">Issue date of the Notice to Keeper (NtK):</label>
 <input type="date" id="ntkDate">
 <label for="ntkHasParkingPeriod">Does the NtK show a parking period?</label>
@@ -232,19 +205,10 @@
 <label class="govuk-radio-label" style="display:inline;" for="ntkStatesLand_no">No</label>
 <div class="govuk-hint">No location is specified at all.</div></div>
 </div>
-<div class="form-group-2" data-depends-on="ntkStatesLandTrigger" data-value="vaguely" style="display:none;">
-<label for="ntkIncidentAddress">What location was specified on the NtK?</label>
-<input type="text" id="ntkIncidentAddress">
-</div>
-</div>
-<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="no" style="display:none;">
-<p>This form is currently set up for defendants who have received a Notice to Keeper (NtK). This form is currently not set up for Notice to Hirer (NtH).</p>
-</div>
-</div>
-
-<button type="button" class="btn btn-primary btn-center" onclick="generateDefence()">Generate Defence</button>
-
-</form>
+<div class="form-group-2" data-depends-on="ntkStatesLandTrigger" data-value="vaguely" style="display:none;"><label for="ntkIncidentAddress">What location was specified on the NtK?</label>
+<input type="text" id="ntkIncidentAddress"></div></div>
+<div class="form-group-2" data-depends-on="receivedNtkTrigger" data-value="no" style="display:none;"><p>This form is currently set up for defendants who have received a Notice to Keeper (NtK). This form is currently not set up for Notice to Hirer (NtH).</p></div></div>
+<button class="btn btn-primary btn-center" type="button" onclick="generateDefence()">Generate Defence</button></form>
     <!-- Output Area -->
     <div id="output-box">
         <h3>PoFA results:</h3>
