@@ -18,7 +18,7 @@ class Div(Conditional):
     ``elements=[P(text="some text")]``.
     """
 
-    base_css_classes: ClassVar[str] = "form-group"
+    base_attributes: ClassVar[dict[str, str]] = {"class": "form-group"}
     # Declared as ``str | HtmlTag`` so callers can pass plain strings; the
     # validator below normalises everything to HtmlTag instances.
     elements: list[str | HtmlTag] = Field(
@@ -36,7 +36,7 @@ class Div(Conditional):
                 children.append(child.to_html())
         inner_html = "\n".join(children)
         return (
-            f'<div class="{self._css_classes()}"{self._visibility_attrs()}>\n'
+            f'<div class="{self.get_attribute("class")}"{self._visibility_attrs()}>\n'
             f"{inner_html}\n"
             f"</div>"
         )

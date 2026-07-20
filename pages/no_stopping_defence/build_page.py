@@ -161,7 +161,7 @@ form = Form(
             ],
         ),
         # Submit
-        Button(text="Generate Defence", onclick="generateDefence()", extra_css_classes=["btn-center"]),
+        Button(text="Generate Defence", onclick="generateDefence()", extra_attributes={"class": "btn-center"}),
     ],
 )
 

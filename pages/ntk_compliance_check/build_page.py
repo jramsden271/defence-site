@@ -62,7 +62,7 @@ form = Form(
         FormGroup(elements=[incident_date]),
         *[FormGroup(elements=[element]) for element in ntk.elements()],
         # Submit
-        Button(text="Check Compliance", onclick="generateDefence()", extra_css_classes=["btn-center"]),
+        Button(text="Check Compliance", onclick="generateDefence()", extra_attributes={"class": "btn-center"}),
     ],
 )
 

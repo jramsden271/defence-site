@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -56,27 +56,60 @@ class HtmlTag(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    # A fixed, structural CSS class string for this kind of element (e.g.
-    # "radio-group govuk-radio-group" for RadioGroup, "form-group-2" for
-    # FormGroup2). It's a ClassVar, not a pydantic field, so it's a true
+    # This kind of element's fixed HTML attributes (e.g.
+    # {"class": "btn btn-primary"} for Button, {"class": "form-group-2"}
+    # for FormGroup2). It's a ClassVar, not a pydantic field, so it's a true
     # class-level constant: it can't be passed to __init__, set per-instance,
     # or appear in model_dump()/schema — only overridden by subclassing.
-    # Elements with no single top-level tag can leave this at "".
-    base_css_classes: ClassVar[str] = ""
+    # Elements with no single top-level tag can leave this empty.
+    base_attributes: ClassVar[dict[str, str]] = {}
 
-    # Additional CSS classes to append alongside base_css_classes. Additive
-    # rather than a replacement, so the structural class above can never be
-    # accidentally dropped by a caller reaching for extra styling.
-    extra_css_classes: list[str] = []
+    # Additional attributes a caller can supply per-instance, alongside
+    # base_attributes. See :meth:`get_attribute`/:meth:`get_attributes` for
+    # how a key set in both is resolved.
+    extra_attributes: dict[str, str] = {}
 
-    def _css_classes(self) -> str:
-        """This element's ``base_css_classes`` plus any ``extra_css_classes``
-        (space-joined). Elements with no single top-level tag can simply not
-        call this — ``extra_css_classes`` then goes unused, which is safe.
+    def get_attribute(self, key: str, concatenate: Literal["yes", "no", "auto"] = "auto") -> str:
+        """Resolve a single HTML attribute from ``base_attributes`` and
+        ``extra_attributes``.
+
+        If only one of the two dicts has ``key``, its value is returned. If
+        neither has it, returns ``""`` — callers can rely on plain
+        truthiness to decide whether to emit the attribute at all (e.g.
+        ``if tag.get_attribute("id"): ...``), rather than handling ``None``.
+
+        If both dicts have ``key``, ``concatenate`` decides how they
+        combine:
+
+        - ``"yes"``: space-join ``base_attributes[key]`` and
+          ``extra_attributes[key]`` (e.g. two ``class`` values).
+        - ``"no"``: ``extra_attributes[key]`` overrides
+          ``base_attributes[key]``.
+        - ``"auto"`` (default): concatenate for ``class`` (matching how
+          CSS classes are meant to add up, not replace one another),
+          override for every other key (most HTML attributes — ``id``,
+          ``onclick``, ``type``, ``href``, ...— are single-valued, so
+          blindly concatenating them would produce invalid HTML/JS).
         """
-        if not self.extra_css_classes:
-            return self.base_css_classes
-        return " ".join([self.base_css_classes, *self.extra_css_classes])
+        base_value = self.base_attributes.get(key)
+        extra_value = self.extra_attributes.get(key)
+
+        if base_value is None:
+            return extra_value or ""
+        if extra_value is None:
+            return base_value
+
+        should_concatenate = concatenate == "yes" or (concatenate == "auto" and key == "class")
+        if should_concatenate:
+            return f"{base_value} {extra_value}"
+        return extra_value
+
+    def get_attributes(self, concatenate: Literal["yes", "no", "auto"] = "auto") -> dict[str, str]:
+        """Resolve every HTML attribute set in ``base_attributes`` and/or
+        ``extra_attributes`` into a single merged dict, applying
+        :meth:`get_attribute`'s ``concatenate`` rule to each key."""
+        keys = {*self.base_attributes.keys(), *self.extra_attributes.keys()}
+        return {key: self.get_attribute(key, concatenate=concatenate) for key in keys}
 
     def to_html(self) -> str:
         """

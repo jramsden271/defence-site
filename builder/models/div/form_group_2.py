@@ -12,4 +12,4 @@ class FormGroup2(Div):
     caller only supplies ``elements`` (and optionally ``depends_on``).
     """
 
-    base_css_classes: ClassVar[str] = "form-group-2"
+    base_attributes: ClassVar[dict[str, str]] = {"class": "form-group-2"}

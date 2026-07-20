@@ -20,7 +20,7 @@ class RadioGroup(Triggerable):
     selected answer via ``some_group.when("value")``.
     """
 
-    base_css_classes: ClassVar[str] = "radio-group govuk-radio-group"
+    base_attributes: ClassVar[dict[str, str]] = {"class": "radio-group govuk-radio-group"}
 
     # inherited: name + .when() (Triggerable)
     question: MultipleChoiceQuestion = Field(..., description="The question this group renders.")
@@ -44,7 +44,7 @@ class RadioGroup(Triggerable):
 
         return (
             f'<label for="{self.name}">{self.question.display_question}</label>\n'
-            f'<div class="{self._css_classes()}" '
+            f'<div class="{self.get_attribute("class")}" '
             f'data-trigger="{self.trigger_id}">\n'
             f"{items_html}\n"
             f"</div>"
