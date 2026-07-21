@@ -24,7 +24,7 @@ as a page's own assets.
 
 Usage from a page's ``build_page.py``::
 
-    from page_templates.defence_generator.render_defence_generator import (
+    from project.page_templates.defence_generator.render_defence_generator import (
         render_defence_generator,
     )
 
@@ -43,7 +43,7 @@ from pathlib import Path
 from builder.field_manifest import write_manifest
 from builder.models.forms.form import Form
 from builder.static_assets import copy_static_asset
-from page_templates.content.render_content import render_content
+from project.page_templates.content.render_content import render_content
 
 TEMPLATE_DIR = Path(__file__).parent
 

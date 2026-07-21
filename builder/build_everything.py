@@ -20,10 +20,10 @@ repo_root = Path(__file__).parent.parent
 # root — not `builder/` itself — needs to be on sys.path for those to resolve.
 sys.path.insert(0, str(repo_root))
 
-from page_templates.shared.css.build_css import write_shared_css  # noqa: E402
-from page_templates.shared.js.build_js import write_shared_js  # noqa: E402
-from page_templates.shared.resources.build_resources import write_shared_resources  # noqa: E402
-from page_templates.shared.theme.build_theme import write_theme_js  # noqa: E402
+from project.page_templates.shared.css.build_css import write_shared_css  # noqa: E402
+from project.page_templates.shared.js.build_js import write_shared_js  # noqa: E402
+from project.page_templates.shared.resources.build_resources import write_shared_resources  # noqa: E402
+from project.page_templates.shared.theme.build_theme import write_theme_js  # noqa: E402
 
 dist_dir = repo_root / "dist"
 
@@ -35,9 +35,9 @@ write_theme_js(dist_dir)
 write_shared_js(dist_dir)
 
 PAGE_BUILDERS = [
-    repo_root / "pages" / "index" / "build_page.py",
-    repo_root / "pages" / "no_stopping_defence" / "build_page.py",
-    repo_root / "pages" / "ntk_compliance_check" / "build_page.py",
+    repo_root / "project" / "pages" / "index" / "build_page.py",
+    repo_root / "project" / "pages" / "no_stopping_defence" / "build_page.py",
+    repo_root / "project" / "pages" / "ntk_compliance_check" / "build_page.py",
 ]
 
 for page_builder in PAGE_BUILDERS:
