@@ -25,12 +25,12 @@ from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
 from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQuestions
 from builder.models.questions.single_question import SingleQuestion
-from page_templates.defence_generator.render_defence_generator import (
+from project.page_templates.defence_generator.render_defence_generator import (
     render_defence_generator,
 )
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent
+repo_root = page_dir.parent.parent.parent
 dist_dir = repo_root / "dist"
 
 

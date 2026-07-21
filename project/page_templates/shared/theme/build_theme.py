@@ -6,14 +6,14 @@ script (embedded directly into every page's ``<head>``) and the deferred
 
 Usage from ``page_templates/content/render_content.py``::
 
-    from page_templates.shared.theme.build_theme import render_theme_init_script
+    from project.page_templates.shared.theme.build_theme import render_theme_init_script
 
     head_extra = render_theme_init_script() + ...
 
 And once, from the top-level build (``builder/build_everything.py``), to
 place the shared ``theme.js`` file into ``dist/js/``::
 
-    from page_templates.shared.theme.build_theme import write_theme_js
+    from project.page_templates.shared.theme.build_theme import write_theme_js
 
     write_theme_js(dist_dir)
 """

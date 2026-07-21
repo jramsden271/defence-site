@@ -17,10 +17,10 @@ from builder.models.basic.a import A
 from builder.models.basic.heading import H2
 from builder.models.basic.p import P
 from builder.models.div.button_column import ButtonColumn
-from page_templates.content.render_content import render_content
+from project.page_templates.content.render_content import render_content
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent
+repo_root = page_dir.parent.parent.parent
 dist_dir = repo_root / "dist"
 
 intro = [

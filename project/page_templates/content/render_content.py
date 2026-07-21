@@ -14,7 +14,7 @@ viewport meta, ...).
 Usage from a page's ``build_page.py`` (or a template built on top of this
 one)::
 
-    from page_templates.content.render_content import render_content
+    from project.page_templates.content.render_content import render_content
 
     html = render_content(
         title="My Page",
@@ -23,9 +23,9 @@ one)::
     )
 """
 
-from page_templates.shared.footer.build_footer import render_footer
-from page_templates.shared.header.build_header import render_header
-from page_templates.shared.theme.build_theme import render_theme_init_script
+from project.page_templates.shared.footer.build_footer import render_footer
+from project.page_templates.shared.header.build_header import render_header
+from project.page_templates.shared.theme.build_theme import render_theme_init_script
 
 # Boilerplate every page needs: charset/viewport meta, favicon, the
 # site-wide shared CSS, and the theme-init script (must run synchronously,

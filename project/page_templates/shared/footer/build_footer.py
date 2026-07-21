@@ -4,7 +4,7 @@ output.
 
 Usage from a template's render module::
 
-    from page_templates.shared.footer.build_footer import render_footer
+    from project.page_templates.shared.footer.build_footer import render_footer
 
     html += render_footer()
 """

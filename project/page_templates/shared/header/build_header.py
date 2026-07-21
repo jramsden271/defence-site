@@ -4,7 +4,7 @@ output.
 
 Usage from a template's render module::
 
-    from page_templates.shared.header.build_header import render_header
+    from project.page_templates.shared.header.build_header import render_header
 
     html += render_header()
 """

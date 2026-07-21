@@ -33,12 +33,12 @@ from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQu
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
-from page_templates.defence_generator.render_defence_generator import (
+from project.page_templates.defence_generator.render_defence_generator import (
     render_defence_generator,
 )
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent
+repo_root = page_dir.parent.parent.parent
 dist_dir = repo_root / "dist"
 
 # Help text is page content, not code — loaded from the page's own
