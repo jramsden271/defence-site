@@ -4,7 +4,7 @@ script (embedded directly into every page's ``<head>``) and the deferred
 ``theme.js`` file (the toggle button's click behaviour), copied once into
 ``dist/js/``.
 
-Usage from ``page_templates/content/render_content.py``::
+Usage from ``builder/models/page.py``::
 
     from project.page_templates.shared.theme.build_theme import render_theme_init_script
 
