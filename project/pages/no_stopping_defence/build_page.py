@@ -5,10 +5,10 @@ Run via the repo-root entry point:
 
     python builder/build_everything.py
 
-This is a ``defence_generator`` page (see
-``page_templates/defence_generator/render_defence_generator.py``): the
+This is a ``DefenceGeneratorPage`` (see
+``page_templates/defence_generator/defence_generator_page.py``): the
 output box, radio-button styling, and copy-to-clipboard/conditional-
-visibility wiring are all owned by that template. Focus here is only on
+visibility wiring are all owned by that class. Focus here is only on
 what's specific to *this* defence: the questions and answers (questions —
 their label, help text and possible answers — are plain data; the control
 classes (``RadioGroup``, ``DateInput``, ...) render that data as HTML, and
@@ -33,8 +33,8 @@ from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQu
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
-from project.page_templates.defence_generator.render_defence_generator import (
-    render_defence_generator,
+from project.page_templates.defence_generator.defence_generator_page import (
+    DefenceGeneratorPage,
 )
 
 page_dir = Path(__file__).parent
@@ -177,19 +177,12 @@ form = Form(
 
 intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
 
-html = render_defence_generator(
+page = DefenceGeneratorPage(
     title="No stopping defence generator",
     page_name="no_stopping_defence",
     intro_html=intro_html,
     form=form,
-    dist_dir=dist_dir,
     page_dir=page_dir,
 )
 
-dist_dir.mkdir(parents=True, exist_ok=True)
-
-output_path = dist_dir / "no_stopping_defence.html"
-with open(output_path, "w", encoding="utf-8") as f:
-    f.write(html)
-
-print(f"Wrote {output_path}")
+page.write(dist_dir)

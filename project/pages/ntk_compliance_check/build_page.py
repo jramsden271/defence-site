@@ -5,8 +5,8 @@ Run via the repo-root entry point:
 
     python builder/build_everything.py
 
-This is a ``defence_generator`` page (see
-``page_templates/defence_generator/render_defence_generator.py``), same as
+This is a ``DefenceGeneratorPage`` (see
+``page_templates/defence_generator/defence_generator_page.py``), same as
 ``pages/no_stopping_defence``. Unlike that page, this one assumes the
 reader already has an NtK in hand and wants to check it for compliance —
 so it asks the incident date, then the standard
@@ -25,8 +25,8 @@ from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
 from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQuestions
 from builder.models.questions.single_question import SingleQuestion
-from project.page_templates.defence_generator.render_defence_generator import (
-    render_defence_generator,
+from project.page_templates.defence_generator.defence_generator_page import (
+    DefenceGeneratorPage,
 )
 
 page_dir = Path(__file__).parent
@@ -73,19 +73,12 @@ form = Form(
 
 intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
 
-html = render_defence_generator(
+page = DefenceGeneratorPage(
     title="Is your NtK valid?",
     page_name="ntk_compliance_check",
     intro_html=intro_html,
     form=form,
-    dist_dir=dist_dir,
     page_dir=page_dir,
 )
 
-dist_dir.mkdir(parents=True, exist_ok=True)
-
-output_path = dist_dir / "ntk_compliance_check.html"
-with open(output_path, "w", encoding="utf-8") as f:
-    f.write(html)
-
-print(f"Wrote {output_path}")
+page.write(dist_dir)
