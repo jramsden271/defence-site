@@ -2,7 +2,7 @@
 Copies a hand-authored static asset (CSS, JS, images, ...) into ``dist/``
 at build time. ``dist/`` is pure build output — nothing should be authored
 directly inside it — so every CSS/JS/image file has a source location
-under ``page_templates/shared/`` (used across templates/pages) or under a
+under ``page_components/shared/`` (used across templates/pages) or under a
 specific page's own folder (used by only that page), and gets copied into
 ``dist/`` from there.
 """

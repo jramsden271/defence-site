@@ -12,13 +12,13 @@ class A(Conditional):
 
     tag: ClassVar[str] = "a"
 
-    text: str = Field(..., description="The link's visible text.")
     href: str = Field(..., description="The link's destination URL.")
+
+    @classmethod
+    def from_text(cls, text: str, href: str, **kwargs):
+        """``text`` may contain inline HTML (e.g. ``<em>``), which is emitted as-is."""
+        return cls(children=[text], href=href, **kwargs)
 
     def _attrs_html(self) -> str:
         """As :meth:`HtmlTag._attrs_html`, plus ``href``."""
         return f'{super()._attrs_html()} href="{self.href}"'
-
-    def _inner_html(self) -> str:
-        """A link's inner HTML is just its text."""
-        return self.text

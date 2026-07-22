@@ -1,0 +1,241 @@
+:root {
+  /* Brand / Interactive Colors */
+  --color-primary: #007BFF;         /* Blue for buttons, summary text */
+  --color-primary-hover: #0056b3;   /* Darker blue for button hover states */
+  --color-secondary: #6c757d;       /* Muted grey for secondary buttons */
+  --color-secondary-hover: #5a6268; /* Darker grey for secondary button hover */
+
+  /* Status & Feedback Colors */
+  --color-error: #DC3545;           /* Red for asterisks, error borders, and error text */
+  --color-error-bg: #FFF5F5;        /* Very light pink/red for error backgrounds */
+  --color-success: #28A745;         /* Green for success output border */
+
+  /* UI Borders & Neutral Backgrounds */
+  --color-border: #ccc;             /* Light grey for standard inputs */
+  --color-bg: white;                /* Page background */
+  --color-bg-details: #f1f3f5;      /* Grey background for <details> tag */
+  --color-bg-output: #e9ecef;       /* Light grey background for output box */
+
+  /* Typography Colors */
+  --color-text: #212529;            /* Dark grey for main text */
+  --color-text-muted: #495057;      /* Charcoal for help text content */
+  --color-text-on-dark: white;      /* White text for buttons */
+}
+
+/* Dark theme overrides. The theme-init script (see js/theme.js) sets
+   data-theme="dark"/"light" on <html> before first paint — from a saved
+   preference, or the OS/browser's prefers-color-scheme otherwise — so this
+   attribute is the single source of truth for which palette applies. */
+:root[data-theme="dark"] {
+  --color-primary: #3391ff;
+  --color-primary-hover: #5aa5ff;
+  --color-secondary: #8a939c;
+  --color-secondary-hover: #a1a9b1;
+
+  --color-error: #ff6b7a;
+  --color-error-bg: #3a1f22;
+  --color-success: #3dd160;
+
+  --color-border: #444950;
+  --color-bg: #1e1e1e;
+  --color-bg-details: #2d2d30;
+  --color-bg-output: #252526;
+
+  --color-text: #d4d4d4;
+  --color-text-muted: #9a9a9a;
+  --color-text-on-dark: white;
+}
+
+/* Smoothly crossfade every themed color when the dark/light toggle
+   switches data-theme, instead of the palette snapping instantly.
+   Scoped to color/background/border so layout-affecting properties
+   (width, padding, ...) are never accidentally animated. */
+*, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 20px;
+    background-color: var(--color-bg-details);
+    border-bottom: 1px solid var(--color-border);
+}
+.site-logo {
+    font-size: 1.5rem;
+    line-height: 1;
+    text-decoration: none;
+}
+.page-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.page-header-nav a {
+    color: var(--color-primary);
+    font-weight: bold;
+    text-decoration: none;
+}
+.page-header-nav a:hover {
+    text-decoration: underline;
+}
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text);
+}
+.theme-toggle:hover {
+    background-color: var(--color-bg-output);
+}
+.page-content {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+.form-group {
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+.form-group-2 {
+    margin-bottom: 5px;
+    padding-left: 35px;
+    margin-left: 15px;
+    border-left: 2px solid var(--color-border);
+}
+
+
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+.required-asterisk {
+    color: var(--color-error);
+}
+input[type="text"], input[type="date"], select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font: inherit;
+}
+.radio-group {
+    margin-top: 8px;
+}
+.input-error {
+    border-color: var(--color-error) !important;
+    background-color: var(--color-error-bg);
+}
+.error-message {
+    color: var(--color-error);
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+details {
+    margin-top: 8px;
+    background: var(--color-bg-details);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+summary {
+    font-weight: bold;
+    color: var(--color-primary);
+    cursor: pointer;
+    outline: none;
+}
+summary:hover {
+    text-decoration: underline;
+}
+.help-content {
+    margin-top: 8px;
+    color: var(--color-text-muted);
+}
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-on-dark);
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+.btn-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.button-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+.button-column .btn {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+}
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-text-on-dark);
+    margin-top: 15px;
+    font-size: 14px;
+    padding: 8px 15px;
+}
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
+}
+.summary-subbox {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: var(--color-bg-output);
+    border-radius: 4px;
+}
+#output-box {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--color-bg-output);
+    border-left: 5px solid var(--color-success);
+    border-radius: 4px;
+    display: none;
+}
+/* Style for our numbered paragraphs */
+.story-paragraph {
+    margin-bottom: 15px;
+}
+.page-footer {
+    margin-top: 50px;
+    padding-top: 15px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    text-align: center;
+}

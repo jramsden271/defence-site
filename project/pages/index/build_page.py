@@ -17,31 +17,29 @@ from builder.models.basic.a import A
 from builder.models.basic.heading import H2
 from builder.models.basic.p import P
 from builder.models.div.button_column import ButtonColumn
-from builder.models.page import Page
+from project.page_components.content.content_page import ContentPage
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent.parent
-dist_dir = repo_root / "dist"
 
-page = Page(
+page = ContentPage(
     title="Defence generators",
     page_name="index",
     body=[
         H2(children=["Defence generators"]),
-        P(text=(
+        P.from_text(
             "This is a placeholder homepage — a proper landing page is "
             "coming later. For now, pick a tool below."
-        )),
+        ),
         ButtonColumn(
             children=[
-                A(
-                    text="No stopping defence generator",
-                    href="no_stopping_defence.html",
+                A.from_text(
+                    "No stopping defence generator",
+                    href="no-stopping-defence.html",
                     custom_attributes={"class": "btn btn-primary"},
                 ),
-                A(
-                    text="Is your NtK valid?",
-                    href="ntk_compliance_check.html",
+                A.from_text(
+                    "Is your NtK valid?",
+                    href="ntk-compliance-check.html",
                     custom_attributes={"class": "btn btn-primary"},
                 ),
             ],
@@ -49,4 +47,6 @@ page = Page(
     ],
 )
 
-page.write(dist_dir)
+
+def get_page() -> ContentPage:
+    return page
