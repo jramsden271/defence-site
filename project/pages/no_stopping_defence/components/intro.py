@@ -1,6 +1,7 @@
 from builder.models.basic.heading import H2
 from builder.models.basic.html_tag import HtmlTag
 from builder.models.basic.p import P
+from builder.models.basic.raw import Raw
 from builder.models.component import Component
 
 
@@ -11,8 +12,8 @@ class Intro(Component):
     directly as page content, same as the ``.html`` fragment this
     replaced."""
 
-    children: list["str | HtmlTag"] = [
-        H2(children=["No stopping defence generator"]),
+    children: list[HtmlTag] = [
+        H2(children=[Raw.from_text("No stopping defence generator")]),
         P.from_text(
             "This tool is designed to help you generate a defence to a "
             "MCOL claim, where the claimant alleges that you contravened "

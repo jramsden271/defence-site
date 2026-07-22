@@ -1,6 +1,7 @@
 from builder.models.basic.div import Div
 from builder.models.basic.em import Em
 from builder.models.basic.heading import H3
+from builder.models.basic.raw import Raw
 from builder.models.component import Component
 from builder.models.forms.button import Button
 
@@ -15,9 +16,9 @@ class OutputBox(Component):
         Div(
             id="output-box",
             children=[
-                H3(children=["PoFA results:"]),
+                H3(children=[Raw.from_text("PoFA results:")]),
                 Div(id="pofaResultsContainer"),
-                H3(children=["Defence:"]),
+                H3(children=[Raw.from_text("Defence:")]),
                 Em.from_text("Review this defence carefully before submitting it to the court."),
                 Div(id="paragraphsContainer"),
                 Div(
@@ -28,10 +29,10 @@ class OutputBox(Component):
                             "margin-bottom: 10px; font-weight: bold;"
                         ),
                     },
-                    children=["Character Count: 0"],
+                    children=[Raw.from_text("Character Count: 0")],
                 ),
                 Button(
-                    children=["Copy Text"],
+                    children=[Raw.from_text("Copy Text")],
                     id="copyBtn",
                     onclick="copyToClipboard()",
                     custom_attributes={"class": "btn btn-secondary"},

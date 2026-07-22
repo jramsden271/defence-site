@@ -35,10 +35,10 @@ class HtmlTag(BaseModel):
     ``tag`` and ``base_attributes`` are fixed per subclass (e.g. ``Div``
     sets ``tag = "div"``, ``base_attributes = {"class": "form-group"}``);
     ``children`` is this tag's inner HTML, rendered by concatenating each
-    child — an :class:`HtmlTag` child contributes its own ``to_html()``,
-    a plain ``str`` child is emitted verbatim (no automatic wrapping —
-    wrap it in a :class:`~models.basic.p.P` yourself if you want a
-    paragraph). Subclasses whose HTML doesn't fit "one wrapping tag around
+    child's own ``to_html()``. Literal text isn't accepted directly — wrap
+    it in a :class:`~models.basic.raw.Raw` (for verbatim HTML) or build it
+    via a ``from_text()`` classmethod (e.g. :class:`~models.basic.p.P` for
+    a paragraph) instead. Subclasses whose HTML doesn't fit "one wrapping tag around
     some inner HTML" (e.g. :class:`~models.forms.radio.radio_item.RadioItem`,
     which renders sibling ``input``/``label``/hint elements) override
     :meth:`to_html` directly instead.
@@ -87,10 +87,10 @@ class HtmlTag(BaseModel):
     # how a key set in both is resolved.
     custom_attributes: dict[str, str] = {}
 
-    # This tag's inner HTML/children. A str child is emitted verbatim by
-    # to_html() (not auto-wrapped in a paragraph); an HtmlTag child
-    # contributes its own to_html().
-    children: list["str | HtmlTag"] = []
+    # This tag's inner HTML/children, each contributing its own to_html().
+    # A literal string isn't accepted directly — wrap it in Raw(html=...)
+    # (or build it via a from_text() classmethod, e.g. P.from_text(...)).
+    children: list["HtmlTag"] = []
 
     # This element's HTML id, if it needs one (e.g. for a front-end script
     # to reference it, or a <label for="">/aria-labelledby target). Every
@@ -170,12 +170,9 @@ class HtmlTag(BaseModel):
         return "".join(f' {key}="{value}"' for key, value in attrs.items())
 
     def _inner_html(self) -> str:
-        """This tag's ``children`` rendered and joined: an :class:`HtmlTag`
-        child via its own ``to_html()``, a plain ``str`` child verbatim."""
-        return "\n".join(
-            child if isinstance(child, str) else child.to_html()
-            for child in self.children
-        )
+        """This tag's ``children`` rendered and joined, each via its own
+        ``to_html()``."""
+        return "\n".join(child.to_html() for child in self.children)
 
     def to_html(self) -> str:
         """Render as ``<{tag} {attrs}>{inner}</{tag}>`` — or, if

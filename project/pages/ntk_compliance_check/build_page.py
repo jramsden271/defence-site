@@ -19,6 +19,7 @@ and generates paragraphs explaining any compliance defects found.
 from pathlib import Path
 
 from builder.models.basic.html_tag import assign_names_from_globals
+from builder.models.basic.raw import Raw
 from builder.models.div.form_group import FormGroup
 from builder.models.forms.button import Button
 from builder.models.forms.date_input import DateInput
@@ -63,7 +64,7 @@ form = Form(
         *[FormGroup(children=[element]) for element in ntk.elements()],
         # Submit
         Button(
-            children=["Check Compliance"],
+            children=[Raw.from_text("Check Compliance")],
             onclick="generateDefence()",
             custom_attributes={"class": "btn btn-primary btn-center"},
         ),

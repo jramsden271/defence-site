@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import Field
 
 from builder.models.basic.html_tag import HtmlTag
+from builder.models.basic.raw import Raw
 
 
 class Label(HtmlTag):
@@ -19,7 +20,7 @@ class Label(HtmlTag):
     @classmethod
     def from_text(cls, text: str, for_: str | None = None):
         """``text`` may contain inline HTML (e.g. ``<em>``), which is emitted as-is."""
-        return cls(children=[text], for_=for_)
+        return cls(children=[Raw.from_text(text)], for_=for_)
 
     def _attrs_html(self) -> str:
         """As :meth:`HtmlTag._attrs_html`, plus ``for`` (if set)."""

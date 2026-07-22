@@ -1,6 +1,7 @@
 from builder.models.basic.heading import H2
 from builder.models.basic.html_tag import HtmlTag
 from builder.models.basic.p import P
+from builder.models.basic.raw import Raw
 from builder.models.component import Component
 
 
@@ -10,8 +11,8 @@ class Intro(Component):
     (an ``<h2>`` followed by three ``<p>``s) render directly as page
     content, same as the ``.html`` fragment this replaced."""
 
-    children: list["str | HtmlTag"] = [
-        H2(children=["Is your NtK valid?"]),
+    children: list[HtmlTag] = [
+        H2(children=[Raw.from_text("Is your NtK valid?")]),
         P.from_text(
             "This tool checks a Notice to Keeper (NtK) you've already "
             "received against the requirements of the Protection of "

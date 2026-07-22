@@ -23,6 +23,7 @@ from builder.help_text import load_help_text
 from builder.models.basic.html_tag import assign_names_from_globals
 from builder.models.basic.div import Div
 from builder.models.basic.p import P
+from builder.models.basic.raw import Raw
 from builder.models.div.form_group import FormGroup
 from builder.models.div.form_group_2 import FormGroup2
 from builder.models.forms.button import Button
@@ -167,7 +168,7 @@ form = Form(
         ),
         # Submit
         Button(
-            children=["Generate Defence"],
+            children=[Raw.from_text("Generate Defence")],
             onclick="generateDefence()",
             custom_attributes={"class": "btn btn-primary btn-center"},
         ),

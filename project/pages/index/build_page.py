@@ -16,6 +16,7 @@ from pathlib import Path
 from builder.models.basic.a import A
 from builder.models.basic.heading import H2
 from builder.models.basic.p import P
+from builder.models.basic.raw import Raw
 from builder.models.div.button_column import ButtonColumn
 from project.page_components.content.content_page import ContentPage
 
@@ -25,7 +26,7 @@ page = ContentPage(
     title="Defence generators",
     page_name="index",
     body=[
-        H2(children=["Defence generators"]),
+        H2(children=[Raw.from_text("Defence generators")]),
         P.from_text(
             "This is a placeholder homepage — a proper landing page is "
             "coming later. For now, pick a tool below."
