@@ -24,7 +24,7 @@ class RadioItem(HtmlTag):
         default=False, description="Whether this is the last item (drops right margin)."
     )
 
-    def id(self) -> str:
+    def radio_id(self) -> str:
         """A unique, stable id derived from the group name and value."""
         return f"{self.radio_group_name}_{self.value}"
 
@@ -37,10 +37,10 @@ class RadioItem(HtmlTag):
         )
         return (
             '<div class="govuk-radio-item">\n'
-            f'<input class="govuk-radio-input" type="radio" id="{self.id()}" '
+            f'<input class="govuk-radio-input" type="radio" id="{self.radio_id()}" '
             f'name="{self.radio_group_name}" value="{self.value}">\n'
             f'<label class="govuk-radio-label" style="display:inline;{margin}" '
-            f'for="{self.id()}">{self.label}</label>\n'
+            f'for="{self.radio_id()}">{self.label}</label>\n'
             f'{description_html}'
             "</div>"
         )

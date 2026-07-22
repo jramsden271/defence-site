@@ -20,7 +20,7 @@ class ExpandingTextbox(HtmlTag):
 
     def to_html(self) -> str:
         paragraphs = self.body.split("\n\n")
-        inner = "\n".join(P(text=paragraph).to_html() for paragraph in paragraphs)
+        inner = "\n".join(P.from_text(paragraph).to_html() for paragraph in paragraphs)
         return (
             "<details>\n"
             f"<summary>{self.title}</summary>\n"

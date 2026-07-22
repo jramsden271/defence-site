@@ -15,7 +15,9 @@ class Div(Conditional):
     here. A plain ``str`` in ``children`` is emitted verbatim, not
     auto-wrapped in a paragraph; wrap it in a
     :class:`~models.basic.p.P` yourself if you want one.
+
+    Has no ``class`` of its own — for a single question block, use
+    :class:`~builder.models.div.form_group.FormGroup` instead.
     """
 
     tag: ClassVar[str] = "div"
-    base_attributes: ClassVar[dict[str, str]] = {"class": "form-group"}

@@ -3,12 +3,12 @@ from typing import ClassVar
 from builder.models.basic.html_tag import Conditional
 
 
-class P(Conditional):
+class Em(Conditional):
     """
-    Represents a paragraph element in the model.
+    Represents an emphasis element in the model.
     """
 
-    tag: ClassVar[str] = "p"
+    tag: ClassVar[str] = "em"
 
     @classmethod
     def from_text(cls, text: str):

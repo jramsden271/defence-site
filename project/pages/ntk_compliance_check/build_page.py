@@ -6,7 +6,7 @@ Run via the repo-root entry point:
     python builder/build_everything.py
 
 This is a ``DefenceGeneratorPage`` (see
-``page_templates/defence_generator/defence_generator_page.py``), same as
+``page_components/defence_generator/defence_generator_page.py``), same as
 ``pages/no_stopping_defence``. Unlike that page, this one assumes the
 reader already has an NtK in hand and wants to check it for compliance —
 so it asks the incident date, then the standard
@@ -23,15 +23,15 @@ from builder.models.div.form_group import FormGroup
 from builder.models.forms.button import Button
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
+from builder.models.page import PageComponent
 from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQuestions
 from builder.models.questions.single_question import SingleQuestion
-from project.page_templates.defence_generator.defence_generator_page import (
+from project.page_components.defence_generator.defence_generator_page import (
     DefenceGeneratorPage,
 )
+from project.pages.ntk_compliance_check.components.intro import Intro
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent.parent
-dist_dir = repo_root / "dist"
 
 
 # ---------------------------------------------------------------------------
@@ -62,7 +62,11 @@ form = Form(
         FormGroup(children=[incident_date]),
         *[FormGroup(children=[element]) for element in ntk.elements()],
         # Submit
-        Button(text="Check Compliance", onclick="generateDefence()", custom_attributes={"class": "btn-center"}),
+        Button(
+            children=["Check Compliance"],
+            onclick="generateDefence()",
+            custom_attributes={"class": "btn btn-primary btn-center"},
+        ),
     ],
 )
 
@@ -71,14 +75,14 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
-
 page = DefenceGeneratorPage(
     title="Is your NtK valid?",
     page_name="ntk_compliance_check",
-    intro_html=intro_html,
+    intro=Intro(),
     form=form,
     page_dir=page_dir,
 )
 
-page.write(dist_dir)
+
+def get_page() -> PageComponent:
+    return page

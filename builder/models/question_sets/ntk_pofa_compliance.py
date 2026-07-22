@@ -10,7 +10,7 @@ names/wiring) so a page doesn't have to redefine them.
 
 Field names are fixed (``receivedNtk``, ``ntkDate``, ``ntkHasParkingPeriod``,
 ...) rather than page-assignable:
-``page_templates/defence_generator/js/pofa_date.js`` and each page's
+``page_components/defence_generator/js/pofa_date.js`` and each page's
 ``generate_defence.js`` read ``formValues.ntkDate`` by that exact name, so
 every page using this set shares the same JS-facing contract.
 
@@ -51,7 +51,7 @@ Usage from a page's ``build_page.py``::
             FormGroup(children=[ntk.received_ntk]),
             FormGroup2(
                 show_when=ntk.received_ntk.when("yes"),
-                children=[P(text="...intro copy..."), *ntk.elements()],
+                children=[P.from_text("...intro copy..."), *ntk.elements()],
             ),
             ...,
         ],

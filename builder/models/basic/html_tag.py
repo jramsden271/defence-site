@@ -92,6 +92,12 @@ class HtmlTag(BaseModel):
     # contributes its own to_html().
     children: list["str | HtmlTag"] = []
 
+    # This element's HTML id, if it needs one (e.g. for a front-end script
+    # to reference it, or a <label for="">/aria-labelledby target). Every
+    # tag can carry one, so it lives here rather than being redeclared per
+    # subclass.
+    id: str | None = None
+
     def get_attribute(self, key: str, concatenate: Literal["yes", "override", "auto"] = "auto") -> str:
         """Resolve a single HTML attribute from ``base_attributes`` and
         ``custom_attributes``.
@@ -145,14 +151,13 @@ class HtmlTag(BaseModel):
 
     def _extra_attributes(self) -> dict[str, str]:
         """Attributes contributed by a mixin (e.g. :class:`Conditional`'s
-        ``data-depends-on``/``data-value``/``style``), on top of
-        ``base_attributes``/``custom_attributes``. Returns ``{}`` by
-        default; a mixin overrides this — not :meth:`_attrs_html` directly
-        — so it only ever has to produce a plain dict, never touch string
-        formatting itself. On a key collision with
-        ``base_attributes``/``custom_attributes``, the mixin's value wins
-        (last-writer-wins; see :meth:`_attrs_html`)."""
-        return {}
+        ``data-depends-on``/``data-value``/``style``) or by ``id``, on top
+        of ``base_attributes``/``custom_attributes``. A mixin overrides
+        this — not :meth:`_attrs_html` directly — so it only ever has to
+        produce a plain dict, never touch string formatting itself. On a
+        key collision with ``base_attributes``/``custom_attributes``, the
+        mixin's value wins (last-writer-wins; see :meth:`_attrs_html`)."""
+        return {"id": self.id} if self.id else {}
 
     def _attrs_html(self) -> str:
         """This tag's resolved attributes — ``get_attributes()`` merged
@@ -212,17 +217,21 @@ class Conditional(HtmlTag):
     show_when: Dependency | None = None
 
     def _extra_attributes(self) -> dict[str, str]:
-        """The ``data-depends-on``/``data-value``/inline-``style``
-        attributes that make this element conditionally shown, when
-        ``show_when`` is set — ``{}`` for unconditional elements.
-        Overriding this hook (rather than :meth:`HtmlTag._attrs_html`
+        """As :meth:`HtmlTag._extra_attributes`, plus the
+        ``data-depends-on``/``data-value``/inline-``style`` attributes
+        that make this element conditionally shown, when ``show_when`` is
+        set. Overriding this hook (rather than :meth:`HtmlTag._attrs_html`
         directly) means any ``Conditional`` subclass gets visibility
         support for free through the base class's normal render, and this
         class only ever has to produce a dict, never touch string
         formatting itself."""
         if self.show_when is None:
-            return {}
-        return {**self.show_when.as_attributes(), "style": "display:none;"}
+            return super()._extra_attributes()
+        return {
+            **super()._extra_attributes(),
+            **self.show_when.as_attributes(),
+            "style": "display:none;",
+        }
 
 
 class Triggerable(HtmlTag):

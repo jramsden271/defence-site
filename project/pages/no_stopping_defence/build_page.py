@@ -6,7 +6,7 @@ Run via the repo-root entry point:
     python builder/build_everything.py
 
 This is a ``DefenceGeneratorPage`` (see
-``page_templates/defence_generator/defence_generator_page.py``): the
+``page_components/defence_generator/defence_generator_page.py``): the
 output box, radio-button styling, and copy-to-clipboard/conditional-
 visibility wiring are all owned by that class. Focus here is only on
 what's specific to *this* defence: the questions and answers (questions —
@@ -29,17 +29,17 @@ from builder.models.forms.button import Button
 from builder.models.forms.date_input import DateInput
 from builder.models.forms.form import Form
 from builder.models.forms.radio.radio_group import RadioGroup
+from builder.models.page import PageComponent
 from builder.models.question_sets.ntk_pofa_compliance import NtkPofaComplianceQuestions
 from builder.models.questions.multiple_choice_question import MultipleChoiceQuestion
 from builder.models.questions.question_option import QuestionOption
 from builder.models.questions.single_question import SingleQuestion
-from project.page_templates.defence_generator.defence_generator_page import (
+from project.page_components.defence_generator.defence_generator_page import (
     DefenceGeneratorPage,
 )
+from project.pages.no_stopping_defence.components.intro import Intro
 
 page_dir = Path(__file__).parent
-repo_root = page_dir.parent.parent.parent
-dist_dir = repo_root / "dist"
 
 # Help text is page content, not code — loaded from the page's own
 # help_text.json rather than hardcoded here. Look up entries by key and pass
@@ -130,11 +130,11 @@ form = Form(
         ),
         FormGroup2(
             show_when=has_incident_date.when("range"),
-            children=[P(text=HELP["date_range_explanation"].body)],
+            children=[P.from_text(HELP["date_range_explanation"].body)],
         ),
         FormGroup2(
             show_when=has_incident_date.when("no"),
-            children=[P(text="If no date is specified at all, consider using the Chan and Akande defence.")],
+            children=[P.from_text("If no date is specified at all, consider using the Chan and Akande defence.")],
         ),
         # Notice to Keeper (keeper only)
         Div(
@@ -144,29 +144,33 @@ form = Form(
                 FormGroup2(
                     show_when=ntk.received_ntk.when("yes"),
                     children=[
-                        P(text=(
+                        P.from_text(
                             "The NtK must meet some strict requirements to allow "
                             "liability to be transferred from the driver to the "
                             "keeper. These questions will help establish whether it "
                             "meets those requirements."
-                        )),
+                        ),
                         *ntk.elements(),
                     ],
                 ),
                 FormGroup2(
                     show_when=ntk.received_ntk.when("no"),
                     children=[
-                        P(text=(
+                        P.from_text(
                             "This form is currently set up for defendants who have "
                             "received a Notice to Keeper (NtK). This form is "
                             "currently not set up for Notice to Hirer (NtH)."
-                        )),
+                        ),
                     ],
                 ),
             ],
         ),
         # Submit
-        Button(text="Generate Defence", onclick="generateDefence()", custom_attributes={"class": "btn-center"}),
+        Button(
+            children=["Generate Defence"],
+            onclick="generateDefence()",
+            custom_attributes={"class": "btn btn-primary btn-center"},
+        ),
     ],
 )
 
@@ -175,14 +179,14 @@ form = Form(
 # Render page
 # ---------------------------------------------------------------------------
 
-intro_html = (page_dir / "blocks" / "intro.html").read_text(encoding="utf-8")
-
 page = DefenceGeneratorPage(
     title="No stopping defence generator",
     page_name="no_stopping_defence",
-    intro_html=intro_html,
+    intro=Intro(),
     form=form,
     page_dir=page_dir,
 )
 
-page.write(dist_dir)
+
+def get_page() -> PageComponent:
+    return page
